@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="8 周 26 节课的德州扑克 MTT 锦标赛互动训练营">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>MTT 锦标赛训练营</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one felt table surface; a brass tab rail switches between the 8-week course and the drills it sends you to. Deliberately single dark look (casino felt). */
+:root{
+  --felt:#0d3b2e; --felt-deep:#072519; --felt-line:#1d5643;
+  --ivory:#f4ecd8; --ink:#e8e2cf; --muted:#9db7a8;
+  --brass:#d6a64a; --brass-deep:#a67b2a;
+  --red:#d2462f; --good:#5fc98a; --warn:#e7b649; --bad:#e2604a;
+  --card-red:#c0301d; --card-black:#1c1c1c;
+  --f-display:"Noto Serif SC","Songti SC",serif;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-mono:"DM Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:radial-gradient(ellipse at 50% -10%,#14523f 0%,var(--felt) 45%,var(--felt-deep) 100%) fixed;background-color:var(--felt-deep);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;min-height:100%}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;font-weight:900}
+h1{font-size:clamp(30px,6vw,50px);letter-spacing:.02em;line-height:1.15}
+h2{font-size:23px}
+h3{font-size:17px;font-weight:600}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass)}
+.lede{color:var(--muted);max-width:62ch;margin-top:10px}
+header.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding-bottom:22px;border-bottom:1px solid var(--felt-line)}
+.chipstack{display:flex;gap:6px;align-items:flex-end}
+.chip{width:46px;height:46px;border-radius:50%;border:5px dashed var(--ivory);display:grid;place-items:center;font-family:var(--f-mono);font-size:11px;color:var(--ivory);font-weight:500;box-shadow:inset 0 0 0 3px rgba(0,0,0,.25)}
+.chip.c1{background:var(--red)}.chip.c2{background:#2b5fa8}.chip.c3{background:#1a1a1a}.chip.c4{background:var(--brass-deep)}
+@media (max-width:640px){header.hero{grid-template-columns:1fr}.chipstack{display:none}}
+
+nav.tabs{display:flex;gap:4px;overflow-x:auto;margin:20px 0 18px;padding-bottom:2px;scrollbar-width:thin}
+nav.tabs button,.chips button{flex:0 0 auto;background:transparent;border:1px solid var(--felt-line);color:var(--muted);font:500 14px var(--f-body);padding:9px 16px;border-radius:999px;cursor:pointer;transition:all .15s}
+nav.tabs button:hover,.chips button:hover{color:var(--ink);border-color:var(--brass-deep)}
+nav.tabs button[aria-selected="true"]{background:var(--brass);color:#1d1406;border-color:var(--brass);font-weight:700}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.chips button{padding:6px 12px;font-size:13px}
+.chips button[aria-pressed="true"]{border-color:var(--brass);color:var(--ivory);background:rgba(214,166,74,.14)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+.panel{display:grid;gap:18px}
+.table{background:rgba(4,22,15,.45);border:1px solid var(--felt-line);border-radius:18px;padding:22px;min-width:0}
+@media (max-width:560px){.table{padding:16px}}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.grid2>*{min-width:0}
+.note{color:var(--muted);font-size:13px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px dashed var(--felt-line)}
+.kv:last-child{border-bottom:0}
+.kv b{font-family:var(--f-mono);font-weight:500;color:var(--ivory);text-align:right}
+
+.btn{font:700 15px var(--f-body);padding:12px 22px;border-radius:12px;border:0;cursor:pointer;transition:transform .08s,filter .15s}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.push{background:var(--red);color:#fff}
+.btn.fold{background:#2b3e36;color:var(--ink);border:1px solid var(--felt-line)}
+.btn.gold{background:var(--brass);color:#1d1406}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--felt-line);font-weight:500;padding:8px 14px;font-size:13px}
+.btn.sm{padding:7px 14px;font-size:13px;border-radius:9px}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* cards */
+.cards{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.card{width:62px;height:88px;border-radius:8px;background:var(--ivory);color:var(--card-black);font-family:var(--f-mono);display:flex;flex-direction:column;justify-content:space-between;padding:5px 7px;box-shadow:0 4px 10px rgba(0,0,0,.4);position:relative}
+.card .r{font-size:22px;font-weight:500;line-height:1}
+.card .s{font-size:26px;line-height:1;align-self:flex-end}
+.card.red{color:var(--card-red)}
+.card.back{background:repeating-linear-gradient(45deg,var(--red) 0 6px,#a5321f 6px 12px);border:3px solid var(--ivory)}
+.card.back *{display:none}
+.card.empty{background:transparent;border:1.5px dashed var(--felt-line);box-shadow:none}
+.card.deal{animation:deal .38s cubic-bezier(.2,.8,.3,1) both}
+@keyframes deal{from{transform:translateY(-40px) rotate(-12deg) scale(.7);opacity:0}to{transform:none;opacity:1}}
+.card.sm{width:44px;height:62px;padding:3px 5px}.card.sm .r{font-size:16px}.card.sm .s{font-size:18px}
+@media (prefers-reduced-motion:reduce){.card.deal{animation:none}*{transition:none!important}}
+
+/* seat ring */
+.seats{position:relative;width:100%;max-width:340px;aspect-ratio:16/10;margin:0 auto}
+.seats .oval{position:absolute;inset:14% 10%;border-radius:50%;background:radial-gradient(#145a44,#0b3528);border:6px solid #3b2615;box-shadow:inset 0 0 0 2px var(--brass-deep)}
+.seat{position:absolute;transform:translate(-50%,-50%);font:500 11px var(--f-mono);background:#10261e;border:1px solid var(--felt-line);color:var(--muted);border-radius:999px;padding:3px 8px;white-space:nowrap}
+.seat.me{background:var(--brass);color:#1d1406;border-color:var(--brass);font-weight:700}
+.seat.folded{opacity:.35}
+.seat.act{border-color:var(--red);color:var(--ivory)}
+.seat.dealer{border-color:var(--ivory);color:var(--ivory)}
+
+/* hand grid */
+.hgrid{display:grid;grid-template-columns:repeat(13,1fr);gap:2px;font:500 clamp(8px,1.6vw,11px) var(--f-mono);max-width:460px}
+.hgrid div{aspect-ratio:1;display:grid;place-items:center;border-radius:3px;background:#173329;color:#7b9688}
+.hgrid div.in{background:var(--red);color:#fff}
+.hgrid div.edge{background:#8a4a1f;color:#fff}
+.hgrid div.me{outline:2px solid var(--brass);outline-offset:-1px;z-index:1;font-weight:700}
+
+/* feedback */
+.verdict{border-radius:14px;padding:16px 18px;border:1px solid var(--felt-line);background:rgba(0,0,0,.2)}
+.verdict.ok{border-color:var(--good)}.verdict.no{border-color:var(--bad)}.verdict.mid{border-color:var(--warn)}
+.verdict .tag{font:700 13px var(--f-mono);letter-spacing:.08em}
+.ok .tag{color:var(--good)}.no .tag{color:var(--bad)}.mid .tag{color:var(--warn)}
+.verdict p+p{margin-top:6px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px}
+.stat{padding:8px 12px;border-left:2px solid var(--brass-deep)}
+.stat .l{font-size:12px;color:var(--muted)}
+.stat .v{font:500 21px var(--f-mono);color:var(--ivory);font-variant-numeric:tabular-nums}
+
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.stage{background:transparent;border:1px solid var(--felt-line);color:var(--ink);border-radius:12px;padding:12px 10px;text-align:left;cursor:pointer;font-family:var(--f-body)}
+.stage small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:11px}
+.stage b{font-family:var(--f-display);font-size:16px}
+.stage[aria-pressed="true"]{border-color:var(--brass);background:rgba(214,166,74,.12)}
+@media (max-width:640px){.stages{grid-template-columns:repeat(2,1fr)}}
+.chart{width:100%;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:520px;height:auto}
+ul.tips{margin:8px 0 0;padding-left:1.2em;display:grid;gap:4px}
+
+label.f{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--brass)}
+input[type=number],select,textarea{background:#0a2219;border:1px solid var(--felt-line);color:var(--ink);border-radius:8px;padding:7px 9px;font:500 14px var(--f-mono);width:100%}
+textarea{font-family:var(--f-body);font-weight:400;resize:vertical;min-height:70px;line-height:1.55}
+.zone{display:inline-block;padding:3px 10px;border-radius:999px;font:700 13px var(--f-body);color:#111}
+
+/* course */
+.course{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:820px){.course{grid-template-columns:1fr}.course .detail{order:-1}}
+.overall{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.ring{width:84px;height:84px}
+.meter{height:8px;background:#173329;border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--brass);transition:width .4s}
+.meter.good i{background:var(--good)}
+.stagehead{font:500 12px var(--f-mono);letter-spacing:.12em;color:var(--brass);margin:16px 0 6px;text-transform:uppercase}
+.stagehead:first-child{margin-top:0}
+.lrow{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:8px 8px;color:var(--ink);font:400 14px var(--f-body);cursor:pointer}
+.lrow:hover:not(:disabled){background:rgba(255,255,255,.04)}
+.lrow:disabled{cursor:not-allowed;color:#5f7a6d}
+.lrow[aria-current="true"]{background:rgba(214,166,74,.12)}
+.lrow small{font:500 11px var(--f-mono);color:var(--muted)}
+.dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--f-mono);border:1.5px solid var(--felt-line);color:var(--muted)}
+.dot.done{background:var(--good);border-color:var(--good);color:#06301c}
+.dot.cur{border-color:var(--brass);color:var(--brass)}
+.pill{font:500 11px var(--f-mono);padding:2px 8px;border-radius:999px;border:1px solid var(--felt-line);color:var(--muted);white-space:nowrap}
+.pill.cur{border-color:var(--brass);color:var(--brass)}
+.pill.done{border-color:var(--good);color:var(--good)}
+.learn{display:grid;gap:10px;max-width:68ch}
+.learn ul{margin:0;padding-left:1.2em;display:grid;gap:5px}
+.key{border-left:3px solid var(--brass);padding:10px 14px;background:rgba(214,166,74,.08);border-radius:0 10px 10px 0}
+.task{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--felt-line);border-radius:12px}
+.task.ok{border-color:rgba(95,201,138,.6)}
+.task .top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.task .lab{display:flex;gap:10px;align-items:flex-start}
+.task input[type=checkbox]{width:18px;height:18px;accent-color:var(--good);margin-top:3px;flex:0 0 auto}
+.banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--brass-deep);border-radius:12px;background:rgba(214,166,74,.08);font-size:13.5px}
+.sync{font:500 11px var(--f-mono);color:var(--muted)}
+
+/* survival table */
+.felt{position:relative;border-radius:120px/90px;background:radial-gradient(ellipse at center,#17634b 0%,#0e4434 70%);border:10px solid #3b2615;box-shadow:inset 0 0 0 2px var(--brass-deep),0 20px 40px rgba(0,0,0,.4);padding:26px 18px;display:grid;gap:16px;justify-items:center;min-height:330px}
+@media (max-width:560px){.felt{border-radius:40px;border-width:6px}}
+.felt .lbl{font:500 11px var(--f-mono);color:var(--muted);letter-spacing:.12em;text-transform:uppercase;text-align:center}
+.pot{font:500 15px var(--f-mono);color:var(--brass)}
+.msg{text-align:center;min-height:3.2em;max-width:52ch;color:var(--ivory)}
+.log{font:400 12.5px var(--f-mono);color:var(--muted);max-height:180px;overflow:auto;display:grid;gap:2px}
+.bars{display:grid;gap:10px}
+.barrow{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center}
+.barpair{display:grid;gap:3px}
+.barpair span{display:block;height:12px;border-radius:3px;transition:width .3s}
+.barpair .chipb{background:#6f8f80}.barpair .icmb{background:var(--brass)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--brass);color:#1d1406;font-weight:700;padding:12px 20px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:20;max-width:calc(100% - 32px);text-align:center}
+footer{margin-top:36px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--felt-line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div>
+    <div class="eyebrow">Multi-Table Tournament · 8 周课程</div>
+    <h1>MTT 锦标赛训练营</h1>
+    <p class="lede">26 节课，分四个阶段，从规则和位置一直学到 ICM 和决赛桌。每节课先读要点，再去练习场完成任务，达到目标后自动解锁下一课。每天一节，大约 30 到 45 分钟。</p>
+  </div>
+  <div class="chipstack" aria-hidden="true"><div class="chip c3">100</div><div class="chip c2">500</div><div class="chip c1">1K</div><div class="chip c4">5K</div></div>
+</header>
+
+<nav class="tabs" role="tablist" id="tabs">
+  <button role="tab" data-t="course" aria-selected="true">课程</button>
+  <button role="tab" data-t="drill">练习场</button>
+  <button role="tab" data-t="map">赛程地图</button>
+  <button role="tab" data-t="icm">ICM 实验室</button>
+  <button role="tab" data-t="run">生存挑战</button>
+</nav>
+
+<div id="banner" class="banner" hidden style="margin-bottom:16px"></div>
+
+<!-- ============ COURSE ============ -->
+<section class="panel" id="p-course">
+  <div class="table overall">
+    <svg class="ring" viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="36" fill="none" stroke="#173329" stroke-width="8"/><circle id="ringArc" cx="42" cy="42" r="36" fill="none" stroke="#d6a64a" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 999" transform="rotate(-90 42 42)"/><text id="ringTxt" x="42" y="47" text-anchor="middle" fill="#f4ecd8" font-family="DM Mono,monospace" font-size="16">0%</text></svg>
+    <div style="display:grid;gap:6px;min-width:0">
+      <div class="row" style="justify-content:space-between"><h2 id="ovTitle">第 1 周</h2><span class="sync" id="syncState">进度保存在本浏览器</span></div>
+      <p class="note" id="ovSub">—</p>
+      <div class="row"><button class="btn gold sm" id="ovGo">继续当前课程</button></div>
+    </div>
+  </div>
+  <div class="course">
+    <div class="table" id="lessonList"></div>
+    <div class="table detail" id="lessonDetail"></div>
+  </div>
+</section>
+
+<!-- ============ DRILL ============ -->
+<section class="panel" id="p-drill" hidden>
+  <div class="chips" id="dChips" role="group" aria-label="选择练习"></div>
+  <div class="grid2">
+    <div class="table" style="display:grid;gap:16px;align-content:start">
+      <div>
+        <div class="row" style="justify-content:space-between"><div class="eyebrow" id="dKind">—</div><span class="note" id="dFilter"></span></div>
+        <h3 id="dQ" style="font-size:19px;margin-top:4px">—</h3>
+      </div>
+      <div id="dVisual" style="display:grid;gap:14px"></div>
+      <div class="row" id="dOpts" style="justify-content:center"></div>
+      <div class="stats">
+        <div class="stat"><div class="l">本练习已答</div><div class="v" id="dN">0</div></div>
+        <div class="stat"><div class="l">正确率</div><div class="v" id="dAcc">—</div></div>
+        <div class="stat"><div class="l">连对</div><div class="v" id="dStreak">0</div></div>
+      </div>
+    </div>
+    <div class="table" style="display:grid;gap:14px;align-content:start">
+      <div id="dVerdict" class="verdict"></div>
+      <div id="dGridWrap" hidden>
+        <div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 id="dGridTitle">推荐范围</h3><span class="note mono" id="dGridLbl"></span></div>
+        <div class="hgrid" id="dGrid"></div>
+        <div class="legend" style="margin-top:8px"><span><i style="background:var(--red)"></i>在范围内</span><span><i style="background:#8a4a1f"></i>边缘</span><span><i style="outline:2px solid var(--brass)"></i>你的手牌</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section class="panel" id="p-map" hidden>
+  <div class="table">
+    <div class="eyebrow">一场 MTT 的五个阶段</div>
+    <h2 style="margin:6px 0 14px">筹码深度决定打法</h2>
+    <div class="stages" id="stages"></div>
+    <div class="grid2" style="margin-top:18px">
+      <div id="stageInfo"></div>
+      <div>
+        <div class="chart" id="depthChart"></div>
+        <p class="note">示例结构：100 人参赛，起始 20,000 筹码，每级约 20 分钟。曲线是剩余玩家的平均筹码折算成多少个大盲（BB）。盲注涨得比人数减少快，所以平均筹码深度一路往下掉。</p>
+      </div>
+    </div>
+  </div>
+  <div class="table">
+    <div class="eyebrow">计算器</div>
+    <h2 style="margin:6px 0 14px">你还剩多少“回合”？</h2>
+    <div class="grid2">
+      <div style="display:grid;gap:12px">
+        <label class="f">你的筹码 <input type="number" id="mStack" value="18000" min="0" step="500"></label>
+        <div class="row" style="flex-wrap:nowrap">
+          <label class="f" style="flex:1">小盲 <input type="number" id="mSb" value="600" min="0" step="50"></label>
+          <label class="f" style="flex:1">大盲 <input type="number" id="mBb" value="1200" min="1" step="50"></label>
+          <label class="f" style="flex:1">大盲前注 <input type="number" id="mAnte" value="1200" min="0" step="50"></label>
+        </div>
+        <p class="note">现在多数比赛用“大盲前注”：大盲位一人替全桌付前注，通常等于一个大盲。</p>
+      </div>
+      <div id="mOut"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ICM ============ -->
+<section class="panel" id="p-icm" hidden>
+  <div class="table">
+    <div class="eyebrow">Independent Chip Model</div>
+    <h2 style="margin:6px 0 6px">筹码不等于钱</h2>
+    <p class="note" style="max-width:66ch">锦标赛奖金按名次发，赢光所有筹码也只能拿第一名的钱。所以筹码翻倍，奖金权益却不会翻倍；输光筹码的损失，比赢下同样筹码的收益更大。ICM 用每个人的筹码占比，推算每人能拿到多少奖金。</p>
+  </div>
+  <div class="grid2">
+    <div class="table" style="display:grid;gap:14px;align-content:start">
+      <h3>泡沫期：剩 4 人，奖励前 3 名</h3>
+      <div id="icmSliders" style="display:grid;gap:10px"></div>
+      <div class="row" style="flex-wrap:nowrap">
+        <label class="f" style="flex:1">第 1 名 % <input type="number" id="pay1" value="50" min="0"></label>
+        <label class="f" style="flex:1">第 2 名 % <input type="number" id="pay2" value="30" min="0"></label>
+        <label class="f" style="flex:1">第 3 名 % <input type="number" id="pay3" value="20" min="0"></label>
+      </div>
+      <div class="row"><button class="btn ghost" id="icmPreset1">均匀筹码</button><button class="btn ghost" id="icmPreset2">一个大码 + 一个短码</button><button class="btn ghost" id="icmPreset3">你是中码</button></div>
+    </div>
+    <div class="table" style="display:grid;gap:14px;align-content:start">
+      <div class="row" style="justify-content:space-between"><h3>筹码占比 vs 奖金权益</h3><div class="legend"><span><i style="background:#6f8f80"></i>筹码%</span><span><i style="background:var(--brass)"></i>奖金%</span></div></div>
+      <div class="bars" id="icmBars"></div>
+    </div>
+  </div>
+  <div class="table">
+    <div class="eyebrow">泡沫因子</div>
+    <h3 style="margin:4px 0 12px">对手全下，你（玩家 A）要多少胜率才值得跟注？</h3>
+    <div class="grid2">
+      <div style="display:grid;gap:10px">
+        <label class="f">谁全下了 <select id="icmVil"><option value="1">玩家 B</option><option value="2">玩家 C</option><option value="3">玩家 D</option></select></label>
+        <div id="icmCallOut"></div>
+      </div>
+      <div id="icmCallExplain" class="note"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RUN ============ -->
+<section class="panel" id="p-run" hidden>
+  <div class="table">
+    <div class="eyebrow">模拟锦标赛</div>
+    <h2 style="margin:6px 0 6px">从 15 个大盲打进决赛桌</h2>
+    <p class="note" style="max-width:66ch">100 人参赛，前 15 名进钱圈，目标是活到最后 9 人。每 9 手牌盲注升一级。只有全下和弃牌两个选项。系统会分开记录两件事：你的<b style="color:var(--ivory)">决策对不对</b>，以及这手牌的<b style="color:var(--ivory)">结果好不好</b>。至少做 5 次决策，这一场才计入课程任务。</p>
+  </div>
+  <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+    <div class="felt">
+      <div class="lbl" id="rVillainLbl">对手</div>
+      <div class="cards" id="rVillain"><div class="card sm empty"></div><div class="card sm empty"></div></div>
+      <div class="cards" id="rBoard"></div>
+      <div class="pot" id="rPot">底池 —</div>
+      <div class="msg" id="rMsg">点击“开始”入座。</div>
+      <div class="cards" id="rHero"><div class="card empty"></div><div class="card empty"></div></div>
+      <div class="lbl" id="rHeroLbl">你</div>
+      <div class="row" style="justify-content:center">
+        <button class="btn gold" id="rStart">开始</button>
+        <button class="btn push" id="rPush" hidden>全下</button>
+        <button class="btn fold" id="rFold" hidden>弃牌</button>
+        <button class="btn gold" id="rNext" hidden>下一手</button>
+      </div>
+    </div>
+    <div class="table" style="display:grid;gap:14px;align-content:start">
+      <div class="stats">
+        <div class="stat"><div class="l">筹码</div><div class="v" id="rStack">—</div></div>
+        <div class="stat"><div class="l">大盲数</div><div class="v" id="rBB">—</div></div>
+        <div class="stat"><div class="l">盲注</div><div class="v" id="rBlinds" style="font-size:17px">—</div></div>
+        <div class="stat"><div class="l">剩余人数</div><div class="v" id="rLeft">—</div></div>
+      </div>
+      <div>
+        <div class="row" style="justify-content:space-between"><span class="note">离决赛桌</span><span class="note mono" id="rPhase">—</span></div>
+        <div class="meter"><i id="rProg" style="width:0"></i></div>
+      </div>
+      <div class="seats" id="rSeats"></div>
+      <div class="stats">
+        <div class="stat"><div class="l">决策正确</div><div class="v" id="rGood">—</div></div>
+        <div class="stat"><div class="l">全下被跟</div><div class="v" id="rAllin">0</div></div>
+        <div class="stat"><div class="l">最好成绩</div><div class="v" id="rBest">—</div></div>
+      </div>
+      <div><div class="note" style="margin-bottom:4px">牌局记录</div><div class="log" id="rLog"></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>推弃、开池、反推范围是基于手牌强度排序、按常见纳什与实战比例近似生成的教学版本；翻牌牌面判断用的是简化规则。适合建立直觉，实战中还要考虑对手倾向、筹码分布和 ICM。</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(()=>{
+/* ================= utils ================= */
+const $=id=>document.getElementById(id);
+const RANKS='23456789TJQKA';
+const SUITS=['♠','♥','♦','♣'];
+const rch=v=>RANKS[v-2];
+const fmt=n=>Math.round(n).toLocaleString('en-US');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const ri=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const lerp=(xs,ys,x)=>{if(x<=xs[0])return ys[0];for(let i=1;i<xs.length;i++){if(x<=xs[i]){const t=(x-xs[i-1])/(xs[i]-xs[i-1]);return ys[i-1]+t*(ys[i]-ys[i-1])}}return ys[ys.length-1]*xs[xs.length-1]/x};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,reduce?Math.min(ms,80):ms));
+const ls={get(k,d){try{const v=localStorage.getItem('mtt_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('mtt_'+k,JSON.stringify(v))}catch(e){}}};
+let toastT;function toast(t){const el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,3200)}
+
+function cardEl(c,opts={}){
+  const d=document.createElement('div');
+  d.className='card'+(opts.sm?' sm':'')+(opts.deal?' deal':'');
+  if(!c){d.classList.add(opts.back?'back':'empty');return d}
+  if(c.s===1||c.s===2)d.classList.add('red');
+  d.innerHTML=`<span class="r">${c.r===10?'10':rch(c.r)}</span><span class="s">${SUITS[c.s]}</span>`;
+  return d;
+}
+const cardsHTML=(cs,sm)=>{const w=document.createElement('div');w.className='cards';cs.forEach(c=>w.appendChild(cardEl(c,{sm,deal:true})));return w};
+function deck(){const d=[];for(let r=2;r<=14;r++)for(let s=0;s<4;s++)d.push({r,s});return shuffle(d)}
+
+/* ================= hand ranking ================= */
+const PAIR={14:85,13:82,12:80,11:77,10:75,9:72,8:69,7:66,6:63,5:60,4:57,3:54,2:50};
+const HIB={14:55,13:49,12:46,11:44,10:42,9:40,8:38,7:36,6:35,5:34,4:33,3:32};
+function estEq(hi,lo,suited){
+  if(hi===lo)return PAIR[hi]+6;
+  const gap=hi-lo-1;
+  let e=HIB[hi]+(hi>=13?1.0:0.9)*(lo-2);
+  e+=(gap===0?2:gap===1?1.2:gap===2?0.5:0)*(hi<=12?1:0.5);
+  if(suited)e+=3.5;
+  return e;
+}
+// open-raise ranking: favours suited & connected hands over weak offsuit ones
+function openScore(h){
+  let s=estEq(h.hi,h.lo,h.suited);
+  if(h.hi===h.lo)return s-3;
+  const gap=h.hi-h.lo-1;
+  if(h.suited)s+=2;
+  if(h.suited&&gap<=1&&h.hi<=11)s+=2.5;
+  if(!h.suited&&h.lo<=7&&h.hi<=13)s-=3;
+  return s;
+}
+const HANDS=[];
+for(let hi=14;hi>=2;hi--)for(let lo=hi;lo>=2;lo--){
+  if(hi===lo)HANDS.push({key:rch(hi)+rch(lo),hi,lo,suited:false,combos:6});
+  else{HANDS.push({key:rch(hi)+rch(lo)+'s',hi,lo,suited:true,combos:4});HANDS.push({key:rch(hi)+rch(lo)+'o',hi,lo,suited:false,combos:12})}
+}
+function pctMap(score){const a=HANDS.slice().sort((x,y)=>score(y)-score(x));let cum=0;const m={};a.forEach(h=>{m[h.key]=(cum+h.combos/2)/1326*100;cum+=h.combos});return m}
+const PCT=pctMap(h=>estEq(h.hi,h.lo,h.suited));
+const PCT_OPEN=pctMap(openScore);
+function keyOf(c1,c2){const hi=Math.max(c1.r,c2.r),lo=Math.min(c1.r,c2.r);if(hi===lo)return rch(hi)+rch(lo);return rch(hi)+rch(lo)+(c1.s===c2.s?'s':'o')}
+function cardsFor(key){const hi=RANKS.indexOf(key[0])+2,lo=RANKS.indexOf(key[1])+2;const s=shuffle([0,1,2,3]);if(key[2]==='s')return [{r:hi,s:s[0]},{r:lo,s:s[0]}];return [{r:hi,s:s[0]},{r:lo,s:s[1]}]}
+
+const POS=['UTG','UTG+1','MP','LJ','HJ','CO','BTN','SB','BB'];
+const POS_CN={'UTG':'枪口','UTG+1':'枪口+1','MP':'中位','LJ':'低劫持','HJ':'劫持位','CO':'关煞位','BTN':'庄位','SB':'小盲','BB':'大盲'};
+const SX=[3,5,8,10,12,15,20];
+const PUSH={
+  'UTG':[60,30,17,13,11,9,7],'UTG+1':[65,33,19,15,12,10,8],'MP':[70,37,21,17,14,11,9],'LJ':[75,42,25,20,16,13,10],
+  'HJ':[80,48,30,24,19,15,12],'CO':[88,58,37,30,24,19,15],'BTN':[95,72,50,42,34,27,21],'SB':[100,85,66,58,50,42,34]};
+const pushPct=(pos,bb)=>Math.min(100,lerp(SX,PUSH[pos],bb));
+const CALLY=[50,32,22,17,14,11,9];
+const callPct=(bb,vpos)=>Math.min(100,lerp(SX,CALLY,bb)*(vpos==='BB'?1.45:vpos==='SB'?1.15:1));
+const OPEN={'UTG':13,'UTG+1':15,'MP':18,'LJ':21,'HJ':26,'CO':32,'BTN':45,'SB':40};
+const RESHOVE={'UTG':7,'UTG+1':8,'MP':9,'LJ':10,'HJ':12,'CO':14,'BTN':18,'SB':22};
+const reshovePct=(op,bb)=>RESHOVE[op]*lerp([12,15,20,25],[1.15,1,0.85,0.7],bb);
+
+function renderGrid(el,pct,map,meKey){
+  el.innerHTML='';
+  const vals=[14,13,12,11,10,9,8,7,6,5,4,3,2];
+  for(let r=0;r<13;r++)for(let c=0;c<13;c++){
+    let k;if(r===c)k=rch(vals[r])+rch(vals[c]);else if(r<c)k=rch(vals[r])+rch(vals[c])+'s';else k=rch(vals[c])+rch(vals[r])+'o';
+    const d=document.createElement('div');d.textContent=k.slice(0,2);d.title=k;
+    const p=map[k];
+    if(p<=pct-2)d.className='in';else if(p<=pct+2)d.className='edge';
+    if(k===meKey)d.classList.add('me');
+    el.appendChild(d);
+  }
+}
+function renderSeats(el,meIdx,opts={}){
+  el.innerHTML='<div class="oval"></div>';
+  POS.forEach((p,i)=>{
+    const ang=Math.PI/2+(i-meIdx)*2*Math.PI/9;
+    const x=50+44*Math.cos(ang),y=50+42*Math.sin(ang);
+    const s=document.createElement('div');s.className='seat';
+    if(i===meIdx)s.classList.add('me');
+    else if(opts.folded&&opts.folded(i))s.classList.add('folded');
+    if(opts.act===i)s.classList.add('act');
+    if(opts.dealer&&i===6&&i!==meIdx)s.classList.add('dealer');
+    s.style.left=x+'%';s.style.top=y+'%';s.textContent=opts.label?opts.label(i):p;el.appendChild(s);
+  });
+}
+
+/* ================= ICM ================= */
+function icm(st,pay){
+  const n=st.length,res=Array(n).fill(0);
+  (function rec(rem,place,prob){
+    if(place>=pay.length||prob<1e-12)return;
+    const tot=rem.reduce((a,i)=>a+st[i],0);if(tot<=0)return;
+    for(const i of rem){const p=prob*st[i]/tot;res[i]+=p*pay[place];rec(rem.filter(x=>x!==i),place+1,p)}
+  })([...Array(n).keys()].filter(i=>st[i]>0),0,1);
+  return res;
+}
+function icmCall(stacks,pay,v){
+  const pt=pay.reduce((a,b)=>a+b,0)||1,risk=Math.min(stacks[0],stacks[v]);
+  const now=icm(stacks,pay)[0]/pt*100;
+  const win=stacks.slice();win[0]+=risk;win[v]-=risk;
+  const lose=stacks.slice();lose[0]-=risk;lose[v]+=risk;
+  const ew=icm(win,pay)[0]/pt*100,el=icm(lose,pay)[0]/pt*100;
+  return {risk,now,ew,el,need:(now-el)/(ew-el)*100,bf:(now-el)/(ew-now)};
+}
+
+/* ================= state & sync ================= */
+const P0={v:1,updatedAt:0,lp:{},stats:{},visit:{stages:[],icm:[],mcalc:false},best:null};
+let P=Object.assign({},P0,ls.get('state',{}));
+P.visit=Object.assign({stages:[],icm:[],mcalc:false},P.visit);
+let dbRef=null,syncBusy=false,syncAgain=false,syncTimer=null;
+function setSync(t){$('syncState').textContent=t}
+function save(){
+  P.updatedAt=Date.now();ls.set('state',P);
+  if(dbRef){clearTimeout(syncTimer);syncTimer=setTimeout(pushSync,1200)}
+}
+async function pushSync(){
+  if(!dbRef)return;
+  if(syncBusy){syncAgain=true;return}
+  syncBusy=true;
+  try{await dbRef.set({state:JSON.parse(JSON.stringify(P))});setSync('已同步到你的账号')}
+  catch(e){setSync('同步失败，进度仍保存在本浏览器')}
+  syncBusy=false;if(syncAgain){syncAgain=false;pushSync()}
+}
+async function initSync(){
+  const c=window.claude;if(!c||typeof c.use!=='function')return;
+  try{
+    const [db,user]=await Promise.all([c.use('db'),c.use('user')]);
+    if(!db||!user)return;
+    const id=await user.id();if(!id)return;
+    const ref=db.doc('data/users/'+id+'/mttCourse');
+    const timer=setTimeout(()=>setSync('暂时连不上账号，进度先存在本浏览器'),10000);
+    const snap=await ref.get();clearTimeout(timer);
+    dbRef=ref;
+    const remote=snap.exists?snap.data().state:null;
+    if(remote&&(remote.updatedAt||0)>(P.updatedAt||0)){
+      P=Object.assign({},P0,remote);P.visit=Object.assign({stages:[],icm:[],mcalc:false},P.visit);ls.set('state',P);renderAll();
+      setSync('已从你的账号载入进度');
+    }else if(P.updatedAt){pushSync()}
+    else setSync('进度会同步到你的账号');
+  }catch(e){setSync('进度保存在本浏览器')}
+}
+
+/* ================= curriculum ================= */
+const CURR=[
+ {stage:'第一阶段 · 打基础',weeks:'第 1–2 周',lessons:[
+  {id:'l1',wk:1,t:'MTT 是怎么运作的',min:30,
+   learn:['锦标赛里每个人交同样的报名费，换到同样多的筹码。筹码输光就出局，不能补。盲注每隔一段时间上涨一级，所以光等好牌，筹码会被慢慢吃光。','奖金只发给最后大约 10% 到 15% 的玩家，而且大头集中在前几名。这决定了 MTT 的两个目标是互相拉扯的：一方面要活下去，另一方面要积累足够的筹码去争前几名。'],
+   pts:['早期筹码深，犯错代价大，打得稳','中后期盲注压力大，要主动偷盲和全下','进钱圈前后，奖金结构开始影响决策（第四阶段讲）'],
+   key:'记住一句话：锦标赛的筹码越往后越“不值钱”，因为盲注在涨。',
+   tasks:[{t:'visit',k:'stages',label:'在“赛程地图”里依次点开五个阶段'},{t:'check',label:'看懂平均筹码曲线：为什么比赛越往后，平均大盲数越少'}]},
+  {id:'l2',wk:1,t:'位置：后说话的人有优势',min:30,
+   learn:['9 人桌从庄位（BTN）开始顺时针是小盲（SB）、大盲（BB），然后是枪口（UTG）、枪口+1、中位（MP）、低劫持（LJ）、劫持位（HJ）、关煞位（CO），再回到庄位。','翻牌前由枪口第一个行动，大盲最后。翻牌后由小盲先行动，庄位永远最后。后行动的人能先看到别人怎么做，信息更多。'],
+   pts:['越靠前的位置，身后还没行动的人越多，要打得越紧','庄位是全桌最好的位置','小盲和大盲已经投了钱，但翻牌后位置最差'],
+   key:'判断任何一手牌，先问自己：我在什么位置？身后还有几个人？',
+   tasks:[{t:'drill',d:'pos',n:20,acc:.9}]},
+  {id:'l3',wk:1,t:'筹码深度：用大盲数思考',min:35,
+   learn:['筹码的绝对数字没有意义，要换算成“大盲数（BB）”：筹码 ÷ 大盲。20,000 筹码在 100/200 时是 100 BB，在 1000/2000 时只有 10 BB，打法完全不同。','M 值把前注也算进去：M = 筹码 ÷（小盲 + 大盲 + 前注），代表你什么都不做还能撑几圈。'],
+   pts:['M ≥ 20 绿区：正常打','10–20 黄区：少平跟，多主动加注','6–10 橙区：开始考虑 3bet 全下','M < 6 红区：只剩全下或弃牌'],
+   key:'每手牌开始前，先数一下自己有多少个大盲。',
+   tasks:[{t:'visit',k:'mcalc',label:'在“赛程地图”的计算器里改几个数字试试'},{t:'drill',d:'mzone',n:20,acc:.85}]},
+  {id:'l4',wk:2,t:'底池赔率',min:35,
+   learn:['跟注值不值，看两个数：你需要多少胜率，和你实际有多少胜率。','所需胜率 = 跟注额 ÷ 跟注后的总底池。例如底池 100，对手再下注 50，底池变成 150，你要跟 50，跟注后总底池 200，所需胜率 = 50 ÷ 200 = 25%。'],
+   pts:['对手下注半池：你需要 25% 胜率','对手下注满池：你需要 33%','对手下注 2 倍池：你需要 40%'],
+   key:'胜率高于所需胜率就跟，低于就弃。长期来看，这就是赚钱的全部秘密。',
+   tasks:[{t:'drill',d:'odds',n:20,acc:.8}]},
+  {id:'l5',wk:2,t:'补牌和“4 和 2 法则”',min:35,
+   learn:['还没成牌时，能让你成牌的剩余牌叫“补牌”（outs）。同花听牌有 9 张，两头顺有 8 张，卡顺只有 4 张。','快速估算：翻牌圈还有两张牌要发，补牌数 × 4 ≈ 胜率；转牌圈只剩一张，补牌数 × 2。'],
+   pts:['翻牌同花听牌 ≈ 35%，转牌只剩 ≈ 20%','“× 4”只在你能看到两张牌时成立，也就是对手已经全下','对手没全下时，还要考虑下一条街还要付多少钱'],
+   key:'听牌在翻牌圈很值钱，到了转牌圈价值砍半。',
+   tasks:[{t:'drill',d:'odds',n:30,acc:.9}]},
+  {id:'l6',wk:2,t:'起手牌：169 种组合',min:35,
+   learn:['两张起手牌一共 1,326 种组合，归类后是 169 种：13 种对子、78 种同花、78 种不同花。每种对子有 6 种组合，同花 4 种，不同花 12 种。','全下的时候没有翻牌后的操作空间，最重要的是“摊牌能赢多少”。这时高张和对子最值钱，同花只多大约 3% 胜率，连张的价值也不大。'],
+   pts:['A 加任何牌在短码全下时都很有价值','K2o 往往比 76s 更适合全下','“好看”的同花连张更适合深筹码打翻牌后'],
+   key:'全下看摊牌胜率：高张、对子优先。',
+   tasks:[{t:'drill',d:'cmp',n:20,acc:.85},{t:'check',label:'实战作业：打一场免费或游戏币锦标赛，每手牌先说出自己的位置和大盲数'}]},
+  {id:'l7',wk:2,t:'第一阶段测验',min:30,exam:true,
+   learn:['把前六课的内容综合检验一次。四项都达到目标，就进入第二阶段：短码推弃。'],
+   pts:[],key:'没过的项目可以反复做，只看最近的那几题。',
+   tasks:[{t:'drill',d:'pos',n:10,acc:.9},{t:'drill',d:'mzone',n:10,acc:.8},{t:'drill',d:'odds',n:10,acc:.8},{t:'drill',d:'cmp',n:10,acc:.8}]}
+ ]},
+ {stage:'第二阶段 · 短码推弃',weeks:'第 3–4 周',lessons:[
+  {id:'l8',wk:3,t:'为什么短码只推或弃',min:35,
+   learn:['筹码少于 15 个大盲时，如果你加注到 2.2 BB，被别人 3bet 全下后只能弃牌，等于白白丢掉 15% 的筹码。','直接全下有两个赚钱途径：一是对手都弃牌，你直接拿走底池里的 2.5 BB（小盲 + 大盲 + 前注）；二是被跟注时，你仍然有不错的胜率。这叫“弃牌率”（fold equity）。'],
+   pts:['只在前面所有人都弃牌时全下','永远不要平跟（limp）','被跟注输了是正常的，重要的是长期决策对'],
+   key:'短码时，“全下或弃牌”是最简单也最接近最优的打法。',
+   tasks:[{t:'drill',d:'push',n:20,acc:.7}]},
+  {id:'l9',wk:3,t:'后位推弃：关煞、庄位、小盲',min:40,
+   learn:['后位全下时，身后只剩 2 到 3 个人。他们全部弃牌的概率很大，所以你可以用很宽的范围全下。','小盲位只需要过大盲一关，10 BB 时可以推一半以上的牌。'],
+   pts:['10 BB 时大约：关煞位前 30%，庄位前 42%，小盲前 58%','大盲位跟注范围比其他人宽，因为他已经投了 1 BB'],
+   key:'身后人越少，推得越宽。',
+   tasks:[{t:'drill',d:'push',n:30,acc:.85,f:{pos:['CO','BTN','SB']}}]},
+  {id:'l10',wk:3,t:'前位推弃：要收紧',min:40,
+   learn:['枪口位全下时，身后还有 8 个人。每个人拿到 AA、KK、AK 这类牌的概率加起来不小，被跟注的风险高很多。','所以前位的全下范围要紧得多。10 BB 时枪口大约只推前 13%：大部分对子、好的 A、KQ。'],
+   pts:['前位多弃一些边缘牌，不会损失太多','中位（MP/LJ/HJ）介于两者之间'],
+   key:'身后人越多，推得越紧。',
+   tasks:[{t:'drill',d:'push',n:30,acc:.85,f:{pos:['UTG','UTG+1','MP','LJ','HJ']}}]},
+  {id:'l11',wk:4,t:'极短码：别等太久',min:35,
+   learn:['筹码只剩 3 到 7 个大盲时，每一圈的盲注和前注要吃掉你 2.5 BB，相当于筹码的三分之一甚至一半。','这时对手跟注你的范围也会很宽，你被跟注时胜率不会太差。所以宁可早一点用一般的牌推，也不要等到 2 BB 时被迫推任何牌。'],
+   pts:['5 BB 时庄位几乎推 70% 的牌','小盲 5 BB 时可以推 85% 以上'],
+   key:'筹码越短，推得越宽，越早越好。',
+   tasks:[{t:'drill',d:'push',n:30,acc:.85,f:{bbMin:3,bbMax:7}}]},
+  {id:'l12',wk:4,t:'决策和结果分开看',min:40,
+   learn:['AK 全下被 QQ 跟注，你只有 46% 胜率，输掉很正常。好的决策也会输，坏的决策也会赢，这叫“方差”。','评价自己时，看决策正确率，而不是这场比赛打到第几名。生存挑战会同时记录这两样东西。'],
+   pts:['一场比赛的名次运气成分很大','100 场比赛的平均成绩才说明水平','输了之后最容易犯错：不要因为上一手输了就乱打'],
+   key:'只为决策负责，不为结果懊恼。',
+   tasks:[{t:'run',games:2,acc:0,label:'完成 2 场生存挑战（每场至少 5 次决策）'}]},
+  {id:'l13',wk:4,t:'第二阶段测验',min:40,exam:true,
+   learn:['综合检验推弃。全位置、全筹码深度随机出题，再加两场决策正确率 80% 以上的生存挑战。'],
+   pts:[],key:'测验通过后，你已经掌握了 MTT 里最常用的一项技能。',
+   tasks:[{t:'drill',d:'push',n:40,acc:.85},{t:'run',games:2,acc:.8,label:'2 场生存挑战，决策正确率 ≥ 80%'}]}
+ ]},
+ {stage:'第三阶段 · 中码与翻牌后',weeks:'第 5–6 周',lessons:[
+  {id:'l14',wk:5,t:'开池加注：第一个入池就加注',min:35,
+   learn:['筹码在 25 到 40 BB 时，前面都弃牌到你，标准打法是加注到 2 到 2.2 BB，或者弃牌。不要平跟。','开池范围和位置强相关：枪口大约只开 13% 的牌，庄位可以开 45%。'],
+   pts:['同花连张和同花 A 在深一些的筹码里更好用','弱的不同花牌（比如 K5o、Q7o）在前位直接弃'],
+   key:'主动加注能赢两种方式：对手弃牌，或者翻牌后打得更好。',
+   tasks:[{t:'drill',d:'open',n:30,acc:.8}]},
+  {id:'l15',wk:5,t:'后位偷盲',min:40,
+   learn:['有大盲前注时，底池里一开始就有 2.5 BB。你在庄位加注到 2.2 BB，只要大约一半的时候所有人弃牌，就已经盈利了。','所以关煞位、庄位、小盲要积极开池，这是中期攒筹码的主要方式。'],
+   pts:['盲注位的玩家越紧，你偷得越多','遇到总是反击的玩家，收紧一点'],
+   key:'中期最稳定的筹码来源，是偷盲注和前注。',
+   tasks:[{t:'drill',d:'open',n:30,acc:.85,f:{pos:['CO','BTN','SB']}}]},
+  {id:'l16',wk:5,t:'面对偷盲：3bet 全下',min:40,
+   learn:['你有 12 到 25 BB，后位玩家开池加注。平跟会让你在翻牌后很被动，最好的反击是直接全下（反推）。','对手开池的位置越靠后，他的范围越宽，你可以反推得越宽。面对枪口开池要非常紧。'],
+   pts:['面对庄位开池，15 BB 大约反推前 18%','筹码越深（20 BB 以上），反推越要谨慎','反推的好处：对手开池后经常只能弃牌'],
+   key:'对手越宽，你反推越宽。',
+   tasks:[{t:'drill',d:'reshove',n:30,acc:.8}]},
+  {id:'l17',wk:6,t:'翻牌圈：这个牌面属于谁',min:40,
+   learn:['你翻牌前加注，大盲跟注。翻牌后要先想：这三张公共牌对谁的范围更有利？','你的加注范围里有更多 AA、KK、AK、AQ，大盲的跟注范围里有更多中小牌和同花连张。所以 A、K 高的干燥牌面对你有利；低而连接的牌面对大盲有利。'],
+   pts:['A72、K83 这类牌面：你有范围优势','765、986 这类牌面：大盲更容易击中','公对牌面通常对加注者有利'],
+   key:'先看牌面属于谁，再看你手里是什么。',
+   tasks:[{t:'drill',d:'cbet',n:20,acc:.8}]},
+  {id:'l18',wk:6,t:'持续下注：尺寸和频率',min:40,
+   learn:['在对你有利的牌面，可以用 1/3 底池的小注，几乎整个范围都下注。对手大部分时候没击中，只能弃牌。','在对你不利的牌面，以过牌为主，只用强牌和强听牌下注，而且下大一点。'],
+   pts:['小注高频：便宜地拿下很多底池','不利牌面硬打，会被加注逼退','被加注时，没有强牌就放弃'],
+   key:'有利牌面小注多打，不利牌面多过牌。',
+   tasks:[{t:'drill',d:'cbet',n:30,acc:.85}]},
+  {id:'l19',wk:6,t:'复盘：每场挑 3 手牌',min:45,
+   learn:['进步最快的方法是复盘。每次打完比赛，挑 3 手关键牌：最大的底池、让你出局的那手、你犹豫最久的那手。','复盘时按顺序写下：位置、大盲数、对手类型、你的动作、现在看来更好的选择。'],
+   pts:['不要只复盘输掉的牌','对照本课程的范围表检查推弃决策'],
+   key:'复盘看的是决策，不是结果。',
+   tasks:[{t:'check',label:'实战作业：打一场免费或游戏币锦标赛'},{t:'note',label:'在下面的笔记里写下一手关键牌的复盘'}]},
+  {id:'l20',wk:6,t:'第三阶段测验',min:40,exam:true,
+   learn:['综合检验开池、反推和翻牌圈判断。'],pts:[],key:'三项都过，进入最后一个阶段：ICM 与决赛桌。',
+   tasks:[{t:'drill',d:'open',n:15,acc:.8},{t:'drill',d:'reshove',n:15,acc:.8},{t:'drill',d:'cbet',n:15,acc:.8}]}
+ ]},
+ {stage:'第四阶段 · ICM 与决赛桌',weeks:'第 7–8 周',lessons:[
+  {id:'l21',wk:7,t:'筹码不等于钱',min:35,
+   learn:['假设剩 4 人，奖金是 50/30/20。你的筹码翻倍，奖金权益却不会翻倍：赢光所有筹码也只能拿 50%。而你输光筹码，就是 0。','ICM 根据每个人的筹码占比，计算他的奖金期望。它告诉我们：在有奖金差距的时候，输掉筹码的痛苦大于赢得筹码的快乐。'],
+   pts:['短码的奖金占比高于筹码占比','大码的奖金占比低于筹码占比','这就是为什么大码可以欺负中码'],
+   key:'泡沫期，每个筹码的价值都不一样。',
+   tasks:[{t:'visit',k:'icm',label:'在“ICM 实验室”里分别点三个预设，比较柱子的变化'},{t:'check',label:'找到一种筹码分布：短码的奖金 % 明显高于筹码 %'}]},
+  {id:'l22',wk:7,t:'泡沫因子',min:40,
+   learn:['泡沫因子 = 输掉时的奖金损失 ÷ 赢下时的奖金收益。只看筹码时它是 1，你需要 50% 胜率才跟；泡沫期它常常是 1.3 到 2，你需要 57% 到 67% 的胜率。','对手筹码能覆盖你时（输了你出局），泡沫因子最大。'],
+   pts:['泡沫期面对全下，要比平时紧得多','AK 对一个宽范围的胜率大约 55% 到 60%，在泡沫期也可能要弃','对手比你短时，压力小很多'],
+   key:'泡沫期，“抛硬币”的牌要弃。',
+   tasks:[{t:'drill',d:'icmcall',n:20,acc:.75}]},
+  {id:'l23',wk:7,t:'大码、中码、短码',min:40,
+   learn:['大码：别人都怕跟你，你应该大量开池和全下施压，尤其是针对中码。','中码：最难受的位置。避免和大码硬碰，可以去欺负短码。','短码：如果离钱圈很近，熬进去也有价值；但不要熬到筹码太短，失去弃牌率。'],
+   pts:['先看清桌上谁能淘汰你','中码面对大码全下，要非常紧'],
+   key:'泡沫期最该收紧的是中码，最该进攻的是大码。',
+   tasks:[{t:'drill',d:'icmcall',n:30,acc:.8}]},
+  {id:'l24',wk:8,t:'钱圈与奖金台阶',min:40,
+   learn:['泡沫一破，短码们会集中全下，因为他们已经锁定了最低奖金。这时你可以适当放宽跟注范围，接收他们的筹码。','之后奖金按台阶上涨（比如第 15 到第 13 名一样，第 12 到第 10 名多一些），台阶附近 ICM 压力又会变大。'],
+   pts:['刚进钱圈：最好的积累机会','临近决赛桌：压力再次升高'],
+   key:'泡沫破了，就把刹车松开。',
+   tasks:[{t:'run',games:2,acc:.8,label:'2 场生存挑战，决策正确率 ≥ 80%'}]},
+  {id:'l25',wk:8,t:'决赛桌',min:40,
+   learn:['决赛桌每淘汰一个人，奖金都会跳一次，ICM 压力贯穿每一手。','每手牌前先看：谁是短码？我能淘汰谁？谁能淘汰我？大码去压迫中码，中码等短码先出局。打到只剩两个人时，奖金差距只剩一档，ICM 的影响变小，可以回到按筹码打。'],
+   pts:['短码还没出局前，中码不要轻易冒险','单挑时打得更凶'],
+   key:'决赛桌先数筹码，再看手牌。',
+   tasks:[{t:'run',games:2,acc:.85,label:'2 场生存挑战，决策正确率 ≥ 85%'},{t:'check',label:'实战作业：打一场比赛，进钱圈后留意短码的全下频率'}]},
+  {id:'l26',wk:8,t:'毕业测验',min:60,exam:true,
+   learn:['最后一次综合检验，覆盖整门课最重要的技能。全部通过，你就完成了 MTT 训练营。'],pts:[],
+   key:'毕业后建议每周还做一次推弃和 ICM 练习，保持手感。',
+   tasks:[{t:'drill',d:'push',n:20,acc:.85},{t:'drill',d:'open',n:10,acc:.8},{t:'drill',d:'reshove',n:10,acc:.8},{t:'drill',d:'cbet',n:10,acc:.8},{t:'drill',d:'odds',n:10,acc:.85},{t:'drill',d:'icmcall',n:10,acc:.8}]}
+ ]}
+];
+const LESSONS=[];CURR.forEach((s,si)=>s.lessons.forEach(l=>{l.si=si;l.idx=LESSONS.length;LESSONS.push(l)}));
+
+/* ================= drills ================= */
+const ZONES=[{n:'绿区',c:'#5fc98a',min:20},{n:'黄区',c:'#e7b649',min:10},{n:'橙区',c:'#e48a3a',min:6},{n:'红区',c:'#e2604a',min:0}];
+const zoneOf=M=>ZONES.findIndex(z=>M>=z.min);
+const ODDS_SCEN=[
+  {kind:'翻牌前 · 对手全下',t:'你拿小对子，对手是两张高牌',hero:[[7,0],[7,1]],eq:55,why:'对子 vs 两张更大的单牌，接近“抛硬币”，对子略占优。'},
+  {kind:'翻牌前 · 对手全下',t:'你拿 AK，对手是中对子',hero:[[14,0],[13,0]],eq:46,why:'两张高牌 vs 小一点的对子，稍微落后。'},
+  {kind:'翻牌前 · 对手全下',t:'你拿 AQ，对手是 AK',hero:[[14,2],[12,3]],eq:26,why:'被“压制”：共享 A，踢脚更小，胜率只剩四分之一左右。'},
+  {kind:'翻牌前 · 对手全下',t:'你拿 JJ，对手是 88',hero:[[11,1],[11,3]],eq:81,why:'大对子 vs 小对子，约 4:1 领先。'},
+  {kind:'翻牌前 · 对手全下',t:'你拿 K9o，对手范围很宽（前 40%）',hero:[[13,0],[9,2]],eq:52,why:'对抗宽范围时，中等牌也有一半左右的胜率。'},
+  {kind:'翻牌前 · 对手全下',t:'你拿 A5s，对手范围较紧（前 12%）',hero:[[14,1],[5,1]],eq:38,why:'对手范围里有很多大 A 和对子，A5 经常被压制。'},
+  {kind:'翻牌圈 · 对手全下',t:'同花听牌（9 张补牌，还有两张牌要发）',hero:[[13,1],[8,1]],eq:35,why:'9 × 4 ≈ 36%，准确值约 35%。对手已经全下，你能看完两张牌。'},
+  {kind:'翻牌圈 · 对手全下',t:'两头顺听牌（8 张补牌，还有两张牌）',hero:[[9,0],[8,2]],eq:31,why:'8 × 4 ≈ 32%，准确值约 31.5%。'},
+  {kind:'翻牌圈 · 对手全下',t:'同花 + 两头顺（15 张补牌）',hero:[[9,3],[8,3]],eq:54,why:'15 张补牌，两张牌下来胜率超过一半，这是“大听牌”。'},
+  {kind:'转牌圈 · 对手下注',t:'同花听牌（9 张补牌，只剩一张）',hero:[[12,2],[10,2]],eq:20,why:'9 × 2 ≈ 18%，准确值约 19.6%。只剩河牌时听牌价值骤降。'},
+  {kind:'转牌圈 · 对手下注',t:'卡顺听牌（4 张补牌，只剩一张）',hero:[[10,0],[7,1]],eq:9,why:'4 × 2 ≈ 8%，准确值约 8.7%。卡顺很少值得跟。'},
+  {kind:'转牌圈 · 对手下注',t:'两头顺听牌（8 张补牌，只剩一张）',hero:[[6,3],[5,0]],eq:17,why:'8 × 2 ≈ 16%，准确值约 17.4%。'}
+];
+const NAMES=['A（你）','B','C','D'];
+function seatsEl(meIdx,opts){const d=document.createElement('div');d.className='seats';renderSeats(d,meIdx,opts);return d}
+function kvHTML(rows){return rows.map(([a,b])=>`<div class="kv"><span>${a}</span><b>${b}</b></div>`).join('')}
+function infoBox(rows){const d=document.createElement('div');d.innerHTML=kvHTML(rows);return d}
+const matchF=(s,f)=>!f||((!f.pos||f.pos.includes(s.pos))&&(f.bbMin==null||s.bb>=f.bbMin)&&(f.bbMax==null||s.bb<=f.bbMax));
+const fLabel=f=>!f?'':[f.pos?'只练 '+f.pos.join(' / '):'',f.bbMin!=null?`${f.bbMin}–${f.bbMax} BB`:''].filter(Boolean).join(' · ');
+
+const DRILLS={
+ pos:{name:'位置',kind:'位置识别',
+  help:'D 是庄位按钮。从庄位顺时针数：小盲、大盲、枪口、枪口+1、中位、低劫持、劫持位、关煞位，再回到庄位。',
+  gen(){return {i:ri(0,8)}},
+  q:s=>'你坐在哪个位置？',
+  view(s){return [seatsEl(s.i,{label:i=>i===s.i?(i===6?'你 · D':'你'):i===6?'D':'·',dealer:true})]},
+  opts(s){return shuffle([POS[s.i],...shuffle(POS.filter(p=>p!==POS[s.i])).slice(0,3)]).map(p=>({l:`${p} ${POS_CN[p]}`,v:p}))},
+  judge(s,v){const ok=v===POS[s.i];const k=(s.i-6+9)%9;
+   return {res:ok?'ok':'no',html:`<p>你在 <b>${POS[s.i]}（${POS_CN[POS[s.i]]}）</b>。${k===0?'你就是庄位。':`从庄位（D）顺时针数第 ${k} 位。`}</p><p class="note">${s.i<=4?'前中位：身后还有很多人没行动，打得要紧。':s.i<=6?'后位：翻牌后大多数时候你最后行动，可以打得更宽。':'盲注位：已经投了钱，但翻牌后最先行动。'}</p>`}}},
+ mzone:{name:'筹码分区',kind:'M 值 · 筹码分区',
+  help:'M = 筹码 ÷（小盲 + 大盲 + 前注）。M ≥ 20 绿区，10–20 黄区，6–10 橙区，6 以下红区。',
+  gen(){const bb=rnd([200,300,400,600,800,1000,1200,1600,2000,3000]);const m=Math.random()*30+1.5;const stack=Math.round(m*2.5*bb/100)*100;return {bb,sb:bb/2,ante:bb,stack,M:stack/(2.5*bb)}},
+  q:s=>'你现在在哪个区？',
+  view(s){return [infoBox([['你的筹码',fmt(s.stack)],['盲注',`${fmt(s.sb)} / ${fmt(s.bb)}`],['大盲前注',fmt(s.ante)]])]},
+  opts(){return ZONES.map((z,i)=>({l:z.n,v:i}))},
+  judge(s,v){const z=zoneOf(s.M);const near=ZONES.some(x=>x.min>0&&Math.abs(s.M-x.min)<0.6);const ok=v===z;const mid=!ok&&near&&Math.abs(v-z)===1;
+   return {res:ok?'ok':mid?'mid':'no',html:`<p class="mono">M = ${fmt(s.stack)} ÷ (${fmt(s.sb)} + ${fmt(s.bb)} + ${fmt(s.ante)}) = ${s.M.toFixed(1)}</p><p>折合 <b class="mono">${(s.stack/s.bb).toFixed(1)} BB</b>，属于 <span class="zone" style="background:${ZONES[z].c}">${ZONES[z].n}</span>${mid?'（刚好在分界线附近，两边都算对）':''}。</p>`}}},
+ cmp:{name:'手牌比较',kind:'全下时谁更强',
+  help:'短码全下时比的是摊牌胜率：对子和高张最重要，同花只多约 3%，连张价值很小。',
+  gen(){let a,b;do{a=rnd(HANDS);b=rnd(HANDS)}while(a.key===b.key||Math.abs(PCT[a.key]-PCT[b.key])<10);return {a,b,ca:cardsFor(a.key),cb:cardsFor(b.key)}},
+  q:s=>'翻牌前全下，对抗随机手牌，哪一手更强？',
+  view(s){const w=document.createElement('div');w.className='row';w.style.justifyContent='center';w.style.gap='28px';
+   [['A',s.ca],['B',s.cb]].forEach(([n,c])=>{const d=document.createElement('div');d.style.textAlign='center';d.innerHTML=`<div class="eyebrow" style="margin-bottom:6px">手牌 ${n}</div>`;d.appendChild(cardsHTML(c));w.appendChild(d)});return [w]},
+  opts(s){return [{l:'A 更强',v:'a'},{l:'B 更强',v:'b'}]},
+  judge(s,v){const win=PCT[s.a.key]<PCT[s.b.key]?'a':'b';const W=win==='a'?s.a:s.b,L=win==='a'?s.b:s.a;
+   return {res:v===win?'ok':'no',html:`<p><b class="mono">${W.key}</b> 大约排在前 <b class="mono">${PCT[W.key].toFixed(0)}%</b>，<b class="mono">${L.key}</b> 排在前 <b class="mono">${PCT[L.key].toFixed(0)}%</b>。</p><p class="note">${W.hi===W.lo?'对子在摊牌时天然领先大多数非对子牌。':W.hi>L.hi?'高张更大的牌，全下时更容易在摊牌中胜出。':'踢脚和同花让它略强一些。'}</p>`}}},
+ odds:{name:'底池赔率',kind:'底池赔率',
+  help:'所需胜率 = 跟注额 ÷（跟注后的总底池）。翻牌圈补牌 × 4，转牌圈补牌 × 2。',
+  gen(){const s=rnd(ODDS_SCEN);let pot,call;
+   if(s.kind.startsWith('翻牌前')){const shove=rnd([8,10,12,15,20]);pot=shove+2.5;call=shove-rnd([0,0,1,0.5])}
+   else{const p0=rnd([4,6,8,10,12,16]);const b=Math.round(p0*rnd([0.33,0.5,0.75,1,1.5])*2)/2;pot=p0+b;call=b}
+   return {s,pot,call,need:call/(pot+call)*100}},
+  q:s=>s.s.t,
+  view(s){const e=document.createElement('div');e.className='eyebrow';e.textContent=s.s.kind;return [e,cardsHTML(s.s.hero.map(([r,su])=>({r,s:su}))),infoBox([['底池（含对手下注）',s.pot+' BB'],['你需要跟注',s.call+' BB'],['你的胜率（约）',s.s.eq+'%']])]},
+  opts(){return [{l:'跟注',v:1,c:'push'},{l:'弃牌',v:0,c:'fold'}]},
+  judge(s,v){const good=s.s.eq>=s.need,edge=Math.abs(s.s.eq-s.need)<2;const ev=s.s.eq/100*(s.pot+s.call)-s.call;
+   return {res:edge?'mid':(!!v===good)?'ok':'no',html:`<p class="mono">所需胜率 = ${s.call} ÷ (${s.pot} + ${s.call}) = ${s.need.toFixed(1)}%</p><p>你的胜率约 <b class="mono">${s.s.eq}%</b>，${good?'高于':'低于'}所需胜率，应该<b>${good?'跟注':'弃牌'}</b>。跟注的期望值约 <b class="mono">${ev>=0?'+':''}${ev.toFixed(2)} BB</b>。</p><p class="note">${s.s.why}</p>`}}},
+ push:{name:'推弃',kind:'短码 · 全下或弃牌',
+  help:'前面都弃牌到你。位置越靠后、筹码越短，推得越宽。',
+  gen(f){const pos=rnd(f&&f.pos?f.pos:POS.slice(0,8));const bb=f&&f.bbMin!=null?ri(f.bbMin,f.bbMax):ri(4,15);const d=deck();return {pos,bb,c:[d[0],d[1]]}},
+  q:s=>`前面都弃牌，你在 ${s.pos}，有 ${s.bb} BB`,
+  view(s){const pi=POS.indexOf(s.pos);return [seatsEl(pi,{folded:i=>i<pi}),cardsHTML(s.c)]},
+  opts(){return [{l:'全下',v:1,c:'push'},{l:'弃牌',v:0,c:'fold'}]},
+  judge(s,v){const key=keyOf(s.c[0],s.c[1]),p=PCT[key],pct=pushPct(s.pos,s.bb);const should=p<=pct,edge=Math.abs(p-pct)<=2;const behind=8-POS.indexOf(s.pos);
+   return {res:edge?'mid':(!!v===should)?'ok':'no',grid:{pct,map:PCT,key,title:'推荐全下范围',lbl:`${s.pos} · ${s.bb}BB · 前 ${pct.toFixed(0)}%`},
+   html:`<p><b class="mono">${key}</b> 大约排在前 <b class="mono">${p.toFixed(0)}%</b>。${s.pos} 位 ${s.bb} BB 时推荐全下前 <b class="mono">${pct.toFixed(0)}%</b>，所以这手${edge?'处在边缘，推或弃都可以':should?'应该全下':'应该弃牌'}。</p><p class="note">身后还有 ${behind} 人可能跟注。${behind<=2?'对手少，范围可以很宽。':behind>=6?'对手多，被大牌跟注的概率高，范围要紧。':'中间位置，范围适中。'}${s.bb<=7?' 筹码很短，等下去会被盲注吃掉，宁可早推。':''}</p>`}}},
+ open:{name:'开池',kind:'中码 · 开池加注',
+  help:'25 到 40 BB，前面都弃牌到你。要么加注到 2.2 BB，要么弃牌，不要平跟。',
+  gen(f){const pos=rnd(f&&f.pos?f.pos:POS.slice(0,8));const d=deck();return {pos,bb:ri(25,40),c:[d[0],d[1]]}},
+  q:s=>`前面都弃牌，你在 ${s.pos}，有 ${s.bb} BB`,
+  view(s){const pi=POS.indexOf(s.pos);return [seatsEl(pi,{folded:i=>i<pi}),cardsHTML(s.c)]},
+  opts(){return [{l:'加注 2.2 BB',v:1,c:'push'},{l:'弃牌',v:0,c:'fold'}]},
+  judge(s,v){const key=keyOf(s.c[0],s.c[1]),p=PCT_OPEN[key],pct=OPEN[s.pos];const should=p<=pct,edge=Math.abs(p-pct)<=2;
+   return {res:edge?'mid':(!!v===should)?'ok':'no',grid:{pct,map:PCT_OPEN,key,title:'推荐开池范围',lbl:`${s.pos} · 前 ${pct}%`},
+   html:`<p><b class="mono">${key}</b> 在开池排序里大约是前 <b class="mono">${p.toFixed(0)}%</b>，${s.pos} 位推荐开池前 <b class="mono">${pct}%</b>，所以${edge?'是边缘牌，开或弃都可以':should?'应该加注':'应该弃牌'}。</p><p class="note">${['CO','BTN','SB'].includes(s.pos)?'后位开池主要是为了偷盲注和前注，范围很宽。':'前中位身后人多，只开有价值的牌。'} 筹码较深时，同花和连张比不同花的弱牌更好打。</p>`}}},
+ reshove:{name:'反推',kind:'面对开池 · 3bet 全下',
+  help:'对手开池加注 2.2 BB，你有 12 到 25 BB。要么全下，要么弃牌。对手位置越靠后，你反推越宽。',
+  gen(){const op=rnd(['UTG','MP','HJ','CO','BTN','SB']);const oi=POS.indexOf(op);const pos=POS[ri(oi+1,8)];const d=deck();return {op,pos,bb:ri(12,25),c:[d[0],d[1]]}},
+  q:s=>`${s.op} 加注到 2.2 BB，其他人弃牌。你在 ${s.pos}，有 ${s.bb} BB`,
+  view(s){const pi=POS.indexOf(s.pos),oi=POS.indexOf(s.op);return [seatsEl(pi,{folded:i=>i!==oi&&i<pi,act:oi}),cardsHTML(s.c)]},
+  opts(){return [{l:'全下',v:1,c:'push'},{l:'弃牌',v:0,c:'fold'}]},
+  judge(s,v){const key=keyOf(s.c[0],s.c[1]),p=PCT[key],pct=reshovePct(s.op,s.bb);const should=p<=pct,edge=Math.abs(p-pct)<=1.5;
+   return {res:edge?'mid':(!!v===should)?'ok':'no',grid:{pct,map:PCT,key,title:'推荐反推范围',lbl:`对 ${s.op} · ${s.bb}BB · 前 ${pct.toFixed(0)}%`},
+   html:`<p><b class="mono">${key}</b> 大约排在前 <b class="mono">${p.toFixed(0)}%</b>。面对 ${s.op} 开池、${s.bb} BB 时，推荐反推前 <b class="mono">${pct.toFixed(0)}%</b>，所以${edge?'是边缘牌':should?'应该全下':'应该弃牌'}。</p><p class="note">${['CO','BTN','SB'].includes(s.op)?'后位开池范围宽，你可以反推更多牌。':'前位开池范围紧，只用强牌反推。'}${s.bb>=20?' 筹码较深时反推风险更大，要更紧。':''}</p>`}}},
+ cbet:{name:'翻牌牌面',kind:'翻牌圈 · 持续下注',
+  help:'你在后位加注，大盲跟注，翻牌后大盲过牌给你。用整个范围思考：A、K 高的干燥牌面对你有利；低而连接的牌面对大盲有利。',
+  gen(){for(;;){const d=deck();const b=[d[0],d[1],d[2]];const r=b.map(c=>c.r).sort((x,y)=>y-x);const reasons=[];let sc=0;
+    if(r[0]>=13){sc+=2;reasons.push(`最大牌是 ${rch(r[0])}：你的加注范围里 A、K 多得多`)}
+    else if(r[0]===12){sc+=1;reasons.push('Q 高：对你略有利')}
+    else if(r[0]<=9){sc-=2;reasons.push('全是 9 以下的小牌：大盲的跟注范围里小牌更多')}
+    const paired=new Set(r).size<3;
+    if(paired){sc+=1;reasons.push('公对牌面：双方都很难击中，范围更强的一方受益')}
+    if(!paired&&r[0]-r[2]<=4){sc-=1;reasons.push('三张牌连得紧：大盲有更多两对、顺子和听牌')}
+    if(new Set(b.map(c=>c.s)).size===1){sc-=1;reasons.push('单色牌面：同花听牌多，局势容易反转')}
+    if(sc!==0)return {b,sc,reasons}}},
+  q:s=>'大盲过牌给你。这个牌面你应该怎么打？',
+  view(s){const e=document.createElement('div');e.className='note';e.style.textAlign='center';e.textContent='翻牌';return [e,cardsHTML(s.b)]},
+  opts(){return [{l:'高频小注（1/3 池）',v:1,c:'push'},{l:'多过牌',v:0,c:'fold'}]},
+  judge(s,v){const bet=s.sc>0;
+   return {res:(!!v===bet)?'ok':'no',html:`<p>这个牌面${bet?'对你（加注者）更有利，适合用小注高频持续下注':'对大盲（跟注者）更有利，应该以过牌为主，只用强牌和强听牌下注'}。</p><ul class="tips">${s.reasons.map(x=>`<li>${x}</li>`).join('')}</ul>`}}},
+ icmcall:{name:'ICM 跟注',kind:'泡沫期 · 跟不跟全下',
+  help:'剩 4 人，奖励前 3 名（50/30/20）。只看筹码时 50% 胜率就能跟，ICM 下你需要更多。',
+  gen(){for(;;){const st=[0,0,0,0].map(()=>ri(4,50)*1000);const v=ri(1,3);const r=icmCall(st,[50,30,20],v);if(!(r.need>45&&r.need<85))continue;
+    let eq=Math.round(r.need+(Math.random()*28-14));if(Math.abs(eq-r.need)<2)eq+=eq>=r.need?4:-4;eq=Math.max(30,Math.min(80,eq));return {st,v,r,eq}}},
+  q:s=>`玩家 ${NAMES[s.v]} 全下。你跟不跟？`,
+  view(s){return [infoBox([...s.st.map((x,i)=>[`玩家 ${NAMES[i]}${i===s.v?' · 全下':''}`,fmt(x)]),['奖金分配','50% / 30% / 20%'],['你的胜率（对他的全下范围）',s.eq+'%']])]},
+  opts(){return [{l:'跟注',v:1,c:'push'},{l:'弃牌',v:0,c:'fold'}]},
+  judge(s,v){const r=s.r,good=s.eq>=r.need,edge=Math.abs(s.eq-r.need)<1.5;
+   return {res:edge?'mid':(!!v===good)?'ok':'no',html:`<p>考虑 ICM 后，你需要 <b class="mono">${r.need.toFixed(1)}%</b> 胜率才能跟（只看筹码是 50%）。你有 <b class="mono">${s.eq}%</b>，应该<b>${good?'跟注':'弃牌'}</b>。</p><p class="mono note">弃牌 ${r.now.toFixed(1)}% · 赢 ${r.ew.toFixed(1)}% · 输 ${r.el.toFixed(1)}% · 泡沫因子 ${r.bf.toFixed(2)}</p><p class="note">${s.st[s.v]>=s.st[0]?'对手能覆盖你，输了你就出局，这是压力最大的情况。':'对手比你短，输了你还在，压力小一些。'}</p>`}}}
+};
+const DORDER=['pos','mzone','cmp','odds','push','open','reshove','cbet','icmcall'];
+
+/* ================= lesson progress ================= */
+function lp(id){return P.lp[id]||(P.lp[id]={done:false,tasks:{},note:''})}
+function taskOk(L,i){
+  const t=L.tasks[i],s=lp(L.id).tasks[i]||{};
+  if(t.t==='drill')return !!s.ok;
+  if(t.t==='run')return (s.games||[]).filter(a=>a>=t.acc).length>=t.games;
+  if(t.t==='visit')return t.k==='stages'?P.visit.stages.length>=5:t.k==='icm'?P.visit.icm.length>=3:!!P.visit.mcalc;
+  if(t.t==='check')return !!s.checked;
+  if(t.t==='note')return !!(lp(L.id).note||'').trim();
+  return false;
+}
+const lessonDone=L=>lp(L.id).done;
+function activeLesson(){return LESSONS.find(L=>!lessonDone(L))||null}
+function unlocked(L){return L.idx===0||lessonDone(LESSONS[L.idx-1])}
+function checkDone(L){
+  if(!L||lessonDone(L))return;
+  if(L.tasks.every((_,i)=>taskOk(L,i))){
+    lp(L.id).done=true;save();
+    const nx=LESSONS[L.idx+1];
+    toast(nx?`完成第 ${L.idx+1} 课！已解锁：${nx.t}`:'恭喜，你完成了整个 MTT 训练营！');
+    if(nx)viewId=nx.id;
+  }
+}
+function recordDrill(d,spot,correct){
+  const st=P.stats[d]||(P.stats[d]={n:0,ok:0,streak:0});
+  st.n++;if(correct){st.ok++;st.streak++}else st.streak=0;
+  const L=activeLesson();
+  if(L)L.tasks.forEach((t,i)=>{
+    if(t.t!=='drill'||t.d!==d||!matchF(spot,t.f))return;
+    const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={w:[],ok:false});
+    if(s.ok)return;
+    s.w=s.w||[];s.w.push(correct?1:0);if(s.w.length>t.n)s.w.shift();
+    if(s.w.length>=t.n&&s.w.reduce((a,b)=>a+b,0)/t.n>=t.acc-1e-9)s.ok=true;
+  });
+  save();checkDone(L);renderBanner();
+}
+function recordRun(acc,dec){
+  const L=activeLesson();if(!L||dec<5)return;
+  L.tasks.forEach((t,i)=>{if(t.t!=='run')return;const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={games:[]});s.games=(s.games||[]).concat([acc]).slice(-20)});
+  save();checkDone(L);renderBanner();
+}
+function visited(){save();checkDone(activeLesson());renderBanner()}
+
+function taskLabel(t){
+  if(t.label)return t.label;
+  return `练习场 · ${DRILLS[t.d].name}${t.f?'（'+fLabel(t.f)+'）':''}：最近 ${t.n} 题正确率 ≥ ${Math.round(t.acc*100)}%`;
+}
+function taskProgress(L,i){
+  const t=L.tasks[i],s=lp(L.id).tasks[i]||{};
+  if(t.t==='drill'){const w=s.w||[];const acc=w.length?Math.round(w.reduce((a,b)=>a+b,0)/w.length*100):null;
+    return {frac:s.ok?1:Math.min(1,w.length/t.n)*(acc!=null&&acc>=t.acc*100?1:.9),txt:s.ok?'已达标':`${w.length}/${t.n} 题${acc!=null?' · 正确率 '+acc+'%':''}`}}
+  if(t.t==='run'){const g=(s.games||[]).filter(a=>a>=t.acc).length,last=(s.games||[]).slice(-1)[0];return {frac:Math.min(1,g/t.games),txt:`${Math.min(g,t.games)}/${t.games} 场达标${last!=null?' · 最近一场决策正确率 '+Math.round(last*100)+'%':''}`}}
+  if(t.t==='visit'){if(t.k==='stages')return {frac:P.visit.stages.length/5,txt:`${P.visit.stages.length}/5 个阶段`};if(t.k==='icm')return {frac:P.visit.icm.length/3,txt:`${P.visit.icm.length}/3 个预设`};return {frac:P.visit.mcalc?1:0,txt:P.visit.mcalc?'已完成':'未开始'}}
+  return null;
+}
+
+/* ================= course UI ================= */
+let viewId=null;
+function renderCourse(){
+  const done=LESSONS.filter(lessonDone).length,A=activeLesson();
+  const pct=done/LESSONS.length;
+  $('ringArc').setAttribute('stroke-dasharray',`${(2*Math.PI*36*pct).toFixed(1)} 999`);$('ringTxt').textContent=Math.round(pct*100)+'%';
+  $('ovTitle').textContent=A?`第 ${A.wk} 周 · 第 ${A.idx+1} 课`:'已毕业';
+  $('ovSub').textContent=A?`已完成 ${done}/${LESSONS.length} 课。当前：${A.t}（约 ${A.min} 分钟）`:'26 节课全部完成。可以继续在练习场和生存挑战里保持手感。';
+  $('ovGo').hidden=!A;$('ovGo').onclick=()=>{viewId=A.id;renderCourse();$('lessonDetail').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})};
+  if(!viewId||!LESSONS.find(l=>l.id===viewId))viewId=(A||LESSONS[LESSONS.length-1]).id;
+  const list=$('lessonList');list.innerHTML='';
+  CURR.forEach(S=>{
+    const h=document.createElement('div');h.className='stagehead';h.textContent=`${S.stage} · ${S.weeks}`;list.appendChild(h);
+    S.lessons.forEach(L=>{
+      const b=document.createElement('button');b.className='lrow';const isDone=lessonDone(L),isCur=A&&A.id===L.id,open=unlocked(L);
+      b.disabled=!open;b.setAttribute('aria-current',viewId===L.id);
+      b.innerHTML=`<span class="dot ${isDone?'done':isCur?'cur':''}">${isDone?'✓':L.idx+1}</span><span>${L.t}<br><small>第 ${L.wk} 周${L.exam?' · 测验':''}</small></span><span class="pill ${isDone?'done':isCur?'cur':''}">${isDone?'已完成':isCur?'进行中':open?'可学习':'未解锁'}</span>`;
+      b.onclick=()=>{viewId=L.id;renderCourse()};list.appendChild(b);
+    });
+  });
+  const L=LESSONS.find(l=>l.id===viewId),st=lp(L.id),isCur=!!(A&&A.id===L.id);
+  $('lessonDetail').innerHTML=`<div class="eyebrow">${CURR[L.si].stage} · 第 ${L.wk} 周 · 第 ${L.idx+1} 课 · 约 ${L.min} 分钟</div>
+   <h2 style="margin:6px 0 14px">${L.t}</h2>
+   <div class="learn">${L.learn.map(p=>`<p>${p}</p>`).join('')}${L.pts.length?`<ul>${L.pts.map(p=>`<li>${p}</li>`).join('')}</ul>`:''}<div class="key"><b>要点：</b>${L.key}</div></div>
+   <h3 style="margin:22px 0 10px">本课任务 ${st.done?'<span class="pill done" style="margin-left:6px">已完成</span>':''}</h3>
+   <div id="taskList" style="display:grid;gap:10px"></div>
+   <label class="f" style="margin-top:16px">一句话总结今天学到的东西（${L.tasks.some(t=>t.t==='note')?'本课需要填写':'可选'}）<textarea id="lessonNote" placeholder="例如：庄位 10 BB 可以推前 42% 的牌，身后人越少推得越宽。"></textarea></label>
+   <div class="row" style="margin-top:14px;justify-content:space-between">
+     <div class="row">${L.idx>0?'<button class="btn ghost" id="prevL">← 上一课</button>':''}${LESSONS[L.idx+1]&&unlocked(LESSONS[L.idx+1])?'<button class="btn ghost" id="nextL">下一课 →</button>':''}</div>
+     ${isCur?'<span id="skipWrap"><button class="btn ghost" id="skipL">我已掌握，跳过本课</button></span>':''}
+   </div>`;
+  $('lessonNote').value=st.note||'';
+  let noteT;$('lessonNote').addEventListener('input',e=>{st.note=e.target.value;clearTimeout(noteT);noteT=setTimeout(()=>{save();if(isCur){checkDone(L);if(lessonDone(L))renderCourse()}},800)});
+  if($('prevL'))$('prevL').onclick=()=>{viewId=LESSONS[L.idx-1].id;renderCourse()};
+  if($('nextL'))$('nextL').onclick=()=>{viewId=LESSONS[L.idx+1].id;renderCourse()};
+  if($('skipL'))$('skipL').onclick=()=>{$('skipWrap').innerHTML='<span class="note">确定跳过？</span> <button class="btn gold sm" id="skipYes">确定</button> <button class="btn ghost" id="skipNo">取消</button>';
+    $('skipYes').onclick=()=>{st.done=true;save();const nx=LESSONS[L.idx+1];if(nx)viewId=nx.id;toast('已跳过，下一课已解锁');renderCourse()};$('skipNo').onclick=renderCourse};
+  const tl=$('taskList');
+  if(!isCur&&!st.done)tl.innerHTML='<p class="note">先完成前面的课程，这里的任务才会开始计数。</p>';
+  L.tasks.forEach((t,i)=>{
+    const ok=taskOk(L,i),pr=taskProgress(L,i),d=document.createElement('div');d.className='task'+(ok?' ok':'');
+    const go=t.t==='drill'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="drill">${ok?'再练练':'去练习'}</button>`:t.t==='run'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="run">去生存挑战</button>`:t.t==='visit'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="${t.k==='icm'?'icm':'map'}">去看看</button>`:'';
+    const chk=t.t==='check'?`<input type="checkbox" id="chk${i}" ${ok?'checked':''} ${isCur||ok?'':'disabled'}>`:`<span class="dot ${ok?'done':''}" style="flex:0 0 auto">${ok?'✓':i+1}</span>`;
+    d.innerHTML=`<div class="top"><label class="lab" ${t.t==='check'?`for="chk${i}"`:''}>${chk}<span>${taskLabel(t)}</span></label>${isCur||ok?go:''}</div>${pr?`<div class="meter ${ok?'good':''}"><i style="width:${Math.round(pr.frac*100)}%"></i></div><div class="note mono">${pr.txt}</div>`:''}`;
+    tl.appendChild(d);
+    const btn=d.querySelector('[data-go]');
+    if(btn)btn.onclick=()=>{if(btn.dataset.go==='drill')openDrill(t.d,t.f||null);else showTab(btn.dataset.go)};
+    const cb=d.querySelector('input[type=checkbox]');
+    if(cb)cb.onchange=()=>{const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={});s.checked=cb.checked;save();checkDone(L);renderCourse()};
+  });
+}
+
+/* ================= banner ================= */
+function renderBanner(){
+  const b=$('banner'),A=activeLesson();
+  if(curTab==='course'||!A){b.hidden=true;return}
+  const rel=A.tasks.map((t,i)=>({t,i})).filter(({t})=>(curTab==='drill'&&t.t==='drill'&&t.d===D.id)||(curTab==='run'&&t.t==='run')||(curTab==='map'&&t.t==='visit'&&t.k!=='icm')||(curTab==='icm'&&t.t==='visit'&&t.k==='icm'));
+  const parts=rel.map(({t,i})=>{const p=taskProgress(A,i);return (taskOk(A,i)?'✓ ':'')+(t.t==='drill'&&t.f?fLabel(t.f)+' · ':'')+(p?p.txt:'')}).join('；');
+  b.hidden=false;
+  b.innerHTML=`<span><b>第 ${A.idx+1} 课 · ${A.t}</b><span class="mono" style="color:var(--muted)"> · ${parts||'这个练习不在本课任务里，可以自由练'}</span></span><button class="btn ghost sm" id="bBack">回到课程</button>`;
+  $('bBack').onclick=()=>showTab('course');
+}
+
+/* ================= drill UI ================= */
+const D={id:'push',f:null,spot:null,done:false};
+function renderChips(){
+  $('dChips').innerHTML='';
+  DORDER.forEach(id=>{const b=document.createElement('button');b.textContent=DRILLS[id].name;b.setAttribute('aria-pressed',id===D.id);
+   b.onclick=()=>{const A=activeLesson();const t=A&&A.tasks.find((t,i)=>t.t==='drill'&&t.d===id&&!taskOk(A,i));openDrill(id,t?t.f||null:null,true)};$('dChips').appendChild(b)});
+}
+function openDrill(id,f,stay){D.id=id;D.f=f;if(!stay)showTab('drill');renderChips();newSpot();renderBanner()}
+function dStats(){const s=P.stats[D.id]||{n:0,ok:0,streak:0};$('dN').textContent=s.n;$('dAcc').textContent=s.n?Math.round(s.ok/s.n*100)+'%':'—';$('dStreak').textContent=s.streak}
+function newSpot(){
+  const X=DRILLS[D.id];D.spot=X.gen(D.f);D.done=false;
+  $('dKind').textContent=X.kind;$('dQ').textContent=X.q(D.spot);
+  $('dFilter').innerHTML=D.f?`${fLabel(D.f)} <button class="btn ghost sm" id="dClear" style="padding:2px 8px;margin-left:4px">取消筛选</button>`:'';
+  if($('dClear'))$('dClear').onclick=()=>{D.f=null;newSpot()};
+  const v=$('dVisual');v.innerHTML='';X.view(D.spot).forEach(e=>v.appendChild(e));
+  const o=$('dOpts');o.innerHTML='';
+  X.opts(D.spot).forEach(op=>{const b=document.createElement('button');b.className='btn '+(op.c||'fold');b.textContent=op.l;b.onclick=()=>answer(op.v);o.appendChild(b)});
+  $('dVerdict').className='verdict';$('dVerdict').innerHTML=`<span class="tag">提示</span><p style="margin-top:6px">${X.help}</p>`;
+  $('dGridWrap').hidden=true;dStats();
+}
+function answer(v){
+  if(D.done)return;D.done=true;
+  const r=DRILLS[D.id].judge(D.spot,v),correct=r.res!=='no';
+  $('dVerdict').className='verdict '+r.res;
+  $('dVerdict').innerHTML=`<span class="tag">${r.res==='ok'?'正确':r.res==='mid'?'边缘情况：两种都算对':'再想想'}</span><div style="margin-top:6px;display:grid;gap:6px">${r.html}</div>`;
+  if(r.grid){$('dGridWrap').hidden=false;$('dGridTitle').textContent=r.grid.title;$('dGridLbl').textContent=r.grid.lbl;renderGrid($('dGrid'),r.grid.pct,r.grid.map,r.grid.key)}
+  const o=$('dOpts');o.innerHTML='';const n=document.createElement('button');n.className='btn gold';n.textContent='下一题 →';n.onclick=newSpot;o.appendChild(n);n.focus({preventScroll:true});
+  recordDrill(D.id,D.spot,correct);dStats();
+}
+
+/* ================= tabs ================= */
+const TABS=['course','drill','map','icm','run'];
+let curTab='course';
+const tabs=[...document.querySelectorAll('#tabs button')];
+function showTab(t){curTab=t;tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));TABS.forEach(x=>$('p-'+x).hidden=x!==t);ls.set('tab',t);if(t==='course')renderCourse();renderBanner();window.scrollTo({top:0,behavior:'auto'})}
+tabs.forEach(b=>b.onclick=()=>{
+  if(b.dataset.t==='drill'&&curTab!=='drill'){const A=activeLesson();const i=A?A.tasks.findIndex((t,i)=>t.t==='drill'&&!taskOk(A,i)):-1;if(i>=0){openDrill(A.tasks[i].d,A.tasks[i].f||null);return}}
+  showTab(b.dataset.t)});
+
+/* ================= map ================= */
+const STAGES=[
+  {k:'早期',lv:'第 1–6 级',bb:'100–60 BB',lo:1,hi:6,title:'早期：深筹码，慢慢攒',
+   body:'筹码很深，一手牌输光的风险大于收益。多打位置好的牌，用小对子、同花连张去博大底池，避免用 AJ、KQ 这类牌在大底池里纠缠。',
+   tips:['不要为了“早点建立优势”冒险全下','后位多入池，前位收紧','留意谁在乱打，后面找他要筹码']},
+  {k:'中期',lv:'第 7–12 级',bb:'60–25 BB',lo:7,hi:12,title:'中期：前注出现，偷盲变重要',
+   body:'大盲前注让每一手底池里都有“死钱”。后位开池偷盲的价值大增，面对偷盲时，20–30 BB 的筹码可以用 3bet 全下反击。',
+   tips:['CO / BTN / SB 积极开池','25 BB 左右开始学“3bet 全下”','筹码掉到 15 BB 前就要主动找机会']},
+  {k:'泡沫期',lv:'钱圈前',bb:'25–12 BB',lo:13,hi:15,title:'泡沫：离钱圈只差几人',
+   body:'谁都不想在钱圈前一名出局，跟注范围普遍收紧。大码应该大量施压；中码最难受，要避免和大码硬碰；短码靠弃牌熬进钱圈也有价值。',
+   tips:['大码：多开池，多全下','中码：避免跟注大码的全下','这里 ICM 影响最大，去 ICM 实验室看看']},
+  {k:'钱圈',lv:'进入奖励圈',bb:'20–10 BB',lo:16,hi:18,title:'钱圈：泡沫破了，大家放开了',
+   body:'刚进钱圈时短码会集中全下，跟注范围可以适当放宽。奖金是分段上涨的，每淘汰一批人才跳一次，平时可以按筹码打。',
+   tips:['抓住短码乱推的机会','奖金台阶附近再收紧','短码的推弃表是主力武器']},
+  {k:'决赛桌',lv:'最后 9 人',bb:'30–10 BB',lo:19,hi:22,title:'决赛桌：每一名都是钱',
+   body:'名次之间的奖金差距最大，ICM 压力贯穿每一手。先数清桌上筹码分布：谁是短码、谁能淘汰你、谁不敢跟你。',
+   tips:['用大码压迫中码','短码出局前不要轻易和别人碰','单挑时 ICM 消失，回到按筹码打']}
+];
+let stageSel=ls.get('stage',0);
+function drawStages(){
+  $('stages').innerHTML='';
+  STAGES.forEach((s,i)=>{const b=document.createElement('button');b.className='stage';b.setAttribute('aria-pressed',i===stageSel);b.innerHTML=`<small>${s.lv}</small><b>${s.k}</b><small>${s.bb}</small>`;
+   b.onclick=()=>{stageSel=i;ls.set('stage',i);if(!P.visit.stages.includes(i)){P.visit.stages.push(i);visited()}drawStages()};$('stages').appendChild(b)});
+  const s=STAGES[stageSel];
+  $('stageInfo').innerHTML=`<h3 style="font-size:20px">${s.title}</h3><p style="margin-top:8px">${s.body}</p><ul class="tips">${s.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`;
+  drawChart();
+}
+const LV=[[100,200],[150,300],[200,400],[250,500],[300,600],[400,800],[500,1000],[600,1200],[800,1600],[1000,2000],[1200,2400],[1500,3000],[2000,4000],[2500,5000],[3000,6000],[4000,8000],[5000,10000],[6000,12000],[8000,16000],[10000,20000],[12500,25000],[15000,30000]];
+function drawChart(){
+  const W=560,H=240,L=44,R=12,T=14,B=34,n=LV.length;
+  const pts=LV.map((l,i)=>{const left=Math.max(9,Math.round(100*Math.pow(0.88,i)));return {i,bb:100*20000/left/l[1]}});
+  const ymax=110,x=i=>L+i*(W-L-R)/(n-1),y=v=>T+(1-Math.min(v,ymax)/ymax)*(H-T-B);
+  const s=STAGES[stageSel];
+  let g=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="平均筹码深度随级别变化"><rect x="${x(s.lo-1)}" y="${T}" width="${x(s.hi-1)-x(s.lo-1)}" height="${H-T-B}" fill="rgba(214,166,74,.14)"/>`;
+  [0,25,50,75,100].forEach(v=>{g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#1d5643" stroke-dasharray="3 4"/><text x="${L-8}" y="${y(v)+4}" fill="#9db7a8" font-size="11" text-anchor="end" font-family="DM Mono,monospace">${v}</text>`});
+  [1,5,10,15,20].forEach(v=>{g+=`<text x="${x(v-1)}" y="${H-14}" fill="#9db7a8" font-size="11" text-anchor="middle" font-family="DM Mono,monospace">Lv${v}</text>`});
+  g+=`<line x1="${L}" x2="${W-R}" y1="${y(15)}" y2="${y(15)}" stroke="#d2462f" stroke-width="1.2"/><text x="${W-R}" y="${y(15)-5}" fill="#d2462f" font-size="11" text-anchor="end">15 BB：推弃区</text>`;
+  const d=pts.map((p,i)=>(i?'L':'M')+x(p.i).toFixed(1)+','+y(p.bb).toFixed(1)).join(' ');
+  g+=`<path d="${d} L${x(n-1)},${y(0)} L${x(0)},${y(0)} Z" fill="rgba(214,166,74,.10)"/><path d="${d}" fill="none" stroke="#d6a64a" stroke-width="2.4"/>`;
+  pts.forEach(p=>{if(p.i>=s.lo-1&&p.i<=s.hi-1)g+=`<circle cx="${x(p.i)}" cy="${y(p.bb)}" r="3.5" fill="#f4ecd8"/>`});
+  g+=`<text x="${L}" y="${T-2}" fill="#9db7a8" font-size="11" font-family="DM Mono,monospace">平均筹码 (BB)</text></svg>`;
+  $('depthChart').innerHTML=g;
+}
+function calcM(){
+  const st=+$('mStack').value||0,sb=+$('mSb').value||0,bb=Math.max(1,+$('mBb').value||1),an=+$('mAnte').value||0;
+  const orbit=sb+bb+an,M=st/orbit,zi=zoneOf(M),z=ZONES[zi];
+  const tip=['筹码健康。可以正常开池、跟注、打翻牌后。','开始失去投机牌的价值。少跟注，多主动加注偷盲。','加注后再弃牌代价很高。考虑 3bet 全下和小尺度开池。','只剩推弃。第一个入池就全下，不要平跟。'][zi];
+  $('mOut').innerHTML=kvHTML([['折合大盲',(st/bb).toFixed(1)+' BB'],['每圈成本（小盲+大盲+前注）',fmt(orbit)],['M 值（能撑几圈）',M.toFixed(1)]])+`<div style="margin-top:12px"><span class="zone" style="background:${z.c}">${z.n}</span><p style="margin-top:8px">${tip}</p><p class="note" style="margin-top:6px">M 值分区来自 Dan Harrington 的经典理论。现代教练更常直接用“大盲数”思考，两者结合着看。</p></div>`;
+}
+['mStack','mSb','mBb','mAnte'].forEach(id=>$(id).addEventListener('input',()=>{calcM();if(!P.visit.mcalc){P.visit.mcalc=true;visited()}}));
+
+/* ================= ICM lab ================= */
+let stacks=ls.get('icm',[30000,25000,25000,20000]);
+const pays=()=>[+$('pay1').value||0,+$('pay2').value||0,+$('pay3').value||0];
+function buildSliders(){
+  $('icmSliders').innerHTML='';
+  stacks.forEach((s,i)=>{
+    const w=document.createElement('label');w.className='f';
+    w.innerHTML=`<span class="row" style="justify-content:space-between"><span>玩家 ${NAMES[i]}</span><span class="mono" id="sv${i}" style="color:var(--ivory)">${fmt(s)}</span></span><input type="range" id="sl${i}" min="1000" max="60000" step="1000" value="${s}">`;
+    $('icmSliders').appendChild(w);
+    w.querySelector('input').addEventListener('input',e=>{stacks[i]=+e.target.value;$('sv'+i).textContent=fmt(stacks[i]);ls.set('icm',stacks);icmDraw()});
+  });
+}
+function icmDraw(){
+  const pay=pays(),tot=stacks.reduce((a,b)=>a+b,0),pt=pay.reduce((a,b)=>a+b,0)||1,eq=icm(stacks,pay);
+  const mx=Math.max(...stacks.map(s=>s/tot*100),...eq.map(e=>e/pt*100));
+  $('icmBars').innerHTML=stacks.map((s,i)=>{const c=s/tot*100,e=eq[i]/pt*100;
+    return `<div class="barrow"><span class="mono" style="font-size:13px">${NAMES[i]}</span><div class="barpair"><span class="chipb" style="width:${c/mx*100}%"></span><span class="icmb" style="width:${e/mx*100}%"></span><span style="height:auto;font:400 12px var(--f-mono);color:var(--muted)">筹码 ${c.toFixed(1)}% → 奖金 ${e.toFixed(1)}% <b style="color:${e>c?'var(--good)':'var(--bad)'}">${e>c?'+':''}${(e-c).toFixed(1)}</b></span></div></div>`}).join('');
+  const v=+$('icmVil').value,r=icmCall(stacks,pay,v);
+  $('icmCallOut').innerHTML=kvHTML([['输赢的筹码',fmt(r.risk)],['弃牌：你的奖金权益',r.now.toFixed(1)+'%'],['跟注赢了',r.ew.toFixed(1)+'%'],['跟注输了',r.el.toFixed(1)+'%'],['只看筹码需要胜率','50%'],['考虑 ICM 需要胜率',`<span style="color:var(--brass);font-size:18px">${r.need.toFixed(1)}%</span>`],['泡沫因子',r.bf.toFixed(2)]]);
+  $('icmCallExplain').innerHTML=`<p>泡沫因子 = 输掉时的损失 ÷ 赢下时的收益。这里是 <b class="mono" style="color:var(--ivory)">${r.bf.toFixed(2)}</b>，输掉一次的痛，相当于赢下一次的 ${r.bf.toFixed(2)} 倍。</p><p style="margin-top:8px">所以即使是“抛硬币”的 AK vs QQ，在泡沫期你也常常应该弃牌。${stacks[v]>=stacks[0]?'对手筹码能覆盖你，输了你就出局，这是最危险的情况。':'对手筹码比你少，输了你也不会出局，所以压力小一些。'}</p>`;
+}
+const presets={icmPreset1:[25000,25000,25000,25000],icmPreset2:[25000,45000,25000,5000],icmPreset3:[25000,40000,30000,5000]};
+Object.entries(presets).forEach(([id,v])=>$(id).onclick=()=>{stacks=v.slice();ls.set('icm',stacks);buildSliders();icmDraw();if(!P.visit.icm.includes(id)){P.visit.icm.push(id);visited()}});
+['pay1','pay2','pay3','icmVil'].forEach(id=>$(id).addEventListener('input',icmDraw));
+
+/* ================= survival ================= */
+function score5(cs){
+  const rs=cs.map(c=>c.r).sort((a,b)=>b-a),flush=cs.every(c=>c.s===cs[0].s),uniq=[...new Set(rs)];let sh=0;
+  if(uniq.length===5){if(rs[0]-rs[4]===4)sh=rs[0];else if(rs[0]===14&&rs[1]===5)sh=5}
+  const cnt={};rs.forEach(r=>cnt[r]=(cnt[r]||0)+1);
+  const g=Object.entries(cnt).map(([r,c])=>[c,+r]).sort((a,b)=>b[0]-a[0]||b[1]-a[1]);
+  let cat,k;
+  if(sh&&flush){cat=8;k=[sh]}else if(g[0][0]===4){cat=7;k=[g[0][1],g[1][1]]}
+  else if(g[0][0]===3&&g[1][0]===2){cat=6;k=[g[0][1],g[1][1]]}
+  else if(flush){cat=5;k=rs}else if(sh){cat=4;k=[sh]}
+  else if(g[0][0]===3){cat=3;k=g.map(x=>x[1])}
+  else if(g[0][0]===2&&g[1][0]===2){cat=2;k=g.map(x=>x[1])}
+  else if(g[0][0]===2){cat=1;k=g.map(x=>x[1])}else{cat=0;k=rs}
+  let v=cat;for(let i=0;i<5;i++)v=v*15+(k[i]||0);return v;
+}
+function best7(cs){let b=0;for(let i=0;i<7;i++)for(let j=i+1;j<7;j++){const s=score5(cs.filter((_,x)=>x!==i&&x!==j));if(s>b)b=s}return b}
+const CAT=['高牌','一对','两对','三条','顺子','同花','葫芦','四条','同花顺'];
+const catOf=v=>CAT[Math.floor(v/759375)];
+const RLV=[[100,200],[150,300],[200,400],[300,600],[400,800],[500,1000],[600,1200],[800,1600],[1000,2000],[1250,2500],[1500,3000],[2000,4000],[2500,5000],[3000,6000],[4000,8000],[5000,10000]];
+const PAID=15,FIELD=100;
+let R=null;
+function rLog(t){const d=document.createElement('div');d.textContent=t;$('rLog').prepend(d)}
+function setBest(place){if(!P.best||place<P.best){P.best=place;save()}}
+function rUI(){
+  $('rBest').textContent=P.best?'第 '+P.best+' 名':'—';
+  if(!R)return;
+  const [sb,bb]=RLV[Math.min(R.lvl,RLV.length-1)];
+  $('rStack').textContent=fmt(R.stack);$('rBB').textContent=(R.stack/bb).toFixed(1);
+  $('rBlinds').textContent=`${sb}/${bb}`;$('rLeft').textContent=R.left;
+  $('rGood').textContent=R.dec?`${R.good}/${R.dec}`:'—';$('rAllin').textContent=R.allins;
+  $('rProg').style.width=((FIELD-R.left)/(FIELD-9)*100)+'%';
+  $('rPhase').textContent=R.left<=9?'决赛桌！':R.left<=PAID?'已进钱圈':R.left<=PAID+4?'泡沫期 · 离钱圈 '+(R.left-PAID)+' 人':'距钱圈 '+(R.left-PAID)+' 人';
+}
+function btns(state){$('rStart').hidden=state!=='start';$('rPush').hidden=$('rFold').hidden=state!=='act';$('rNext').hidden=state!=='next'}
+function rStart(){R={stack:3000,hand:0,lvl:0,left:FIELD,seat:ri(0,8),dec:0,good:0,allins:0};$('rLog').innerHTML='';rLog('入座。起始筹码 3,000（15 BB）。');rDeal()}
+function rDeal(){
+  R.lvl=Math.floor(R.hand/9);
+  const [sb,bb]=RLV[Math.min(R.lvl,RLV.length-1)];
+  const pi=(R.seat+R.hand)%9;R.pos=POS[pi];R.pi=pi;R.sb=sb;R.bb=bb;R.ante=bb;
+  if(R.hand>0&&R.hand%9===0)rLog(`盲注升级：${sb}/${bb}，前注 ${bb}`);
+  R.hand++;R.deck=deck();R.cards=[R.deck.pop(),R.deck.pop()];
+  $('rVillain').innerHTML='';$('rVillain').append(cardEl(null,{sm:true}),cardEl(null,{sm:true}));$('rVillainLbl').textContent='对手';
+  $('rBoard').innerHTML='';$('rHero').innerHTML='';R.cards.forEach(c=>$('rHero').appendChild(cardEl(c,{deal:true})));
+  $('rHeroLbl').textContent=`你 · ${R.pos}`;
+  renderSeats($('rSeats'),pi,{folded:i=>i<pi});rUI();
+  if(R.pos==='BB'){
+    const walk=Math.random()<0.4;
+    if(walk){R.stack+=sb;$('rMsg').textContent=`你在大盲位。所有人弃牌给你，白赚小盲 +${sb}。`}
+    else{R.stack-=Math.min(R.stack,bb+R.ante);$('rMsg').textContent=`你在大盲位，付了大盲和前注（${bb+R.ante}）。前面有人加注，你的牌不够跟，弃牌。`}
+    $('rPot').textContent='底池 —';rLog(`#${R.hand} BB 位：${walk?'+'+sb:'−'+(bb+R.ante)}`);
+    if(R.stack<=0)return rBust();
+    rUI();btns('next');return;
+  }
+  $('rPot').textContent=`底池 ${fmt(sb+bb+R.ante)}`;
+  $('rMsg').textContent=`前面都弃牌了，轮到你在 ${R.pos}（${POS_CN[R.pos]}）。你有 ${(R.stack/bb).toFixed(1)} BB${R.pos==='SB'?'，已投入小盲 '+sb:''}。`;
+  btns('act');
+}
+async function rAct(push){
+  btns('none');
+  const key=keyOf(R.cards[0],R.cards[1]),bbN=R.stack/R.bb,pct=pushPct(R.pos,bbN),p=PCT[key];
+  const should=p<=pct,edge=Math.abs(p-pct)<=2,right=edge||push===should;
+  R.dec++;if(right)R.good++;
+  const judge=edge?'（边缘牌，推或弃都行）':right?`（决策正确：范围前 ${pct.toFixed(0)}%，${key} 在前 ${p.toFixed(0)}%）`:`（决策偏差：这里推荐${should?'全下':'弃牌'}，范围前 ${pct.toFixed(0)}%，${key} 在前 ${p.toFixed(0)}%）`;
+  if(!push){
+    if(R.pos==='SB')R.stack-=R.sb;
+    $('rMsg').textContent='你弃牌了。'+judge;rLog(`#${R.hand} ${R.pos} ${key} 弃牌 ${right?'✓':'✗'}`);
+    rUI();btns('next');return;
+  }
+  const S=R.stack;let caller=null,vc=null;
+  for(let j=R.pi+1;j<9&&!caller;j++){
+    const h=[R.deck.pop(),R.deck.pop()],vp=POS[j];
+    renderSeats($('rSeats'),R.pi,{folded:i=>i<R.pi||(i<j&&i!==R.pi),act:j});
+    $('rMsg').textContent=`你全下 ${fmt(S)}！${vp} 在考虑……`;
+    await wait(380);
+    if(PCT[keyOf(h[0],h[1])]<=callPct(bbN,vp)){caller=vp;vc=h}
+  }
+  if(!caller){
+    const gain=R.ante+R.bb+(R.pos==='SB'?0:R.sb);R.stack+=gain;
+    renderSeats($('rSeats'),R.pi,{folded:i=>i!==R.pi});
+    $('rMsg').textContent=`所有人弃牌，你拿下底池 +${fmt(gain)}。${judge}`;rLog(`#${R.hand} ${R.pos} ${key} 全下无人跟 +${gain} ${right?'✓':'✗'}`);
+    rUI();btns('next');return;
+  }
+  R.allins++;
+  const pot=2*S+R.ante+((R.pos!=='SB'&&caller!=='SB')?R.sb:0)+(caller!=='BB'?R.bb:0);
+  $('rPot').textContent=`底池 ${fmt(pot)}`;$('rVillainLbl').textContent=`${caller} 跟注`;
+  $('rVillain').innerHTML='';vc.forEach(c=>$('rVillain').appendChild(cardEl(c,{sm:true,deal:true})));
+  $('rMsg').textContent=`${caller} 用 ${keyOf(vc[0],vc[1])} 跟注！发公共牌……`;
+  await wait(700);
+  const board=[];
+  for(let i=0;i<5;i++){board.push(R.deck.pop());$('rBoard').appendChild(cardEl(board[i],{sm:true,deal:true}));await wait(i<2?260:600)}
+  const hs=best7([...R.cards,...board]),vs=best7([...vc,...board]);
+  let res;
+  if(hs>vs){R.stack=pot;res=`你赢了！${catOf(hs)} 胜过 ${catOf(vs)}，筹码涨到 ${fmt(pot)}。`}
+  else if(hs<vs){R.stack=0;res=`你输了。对手 ${catOf(vs)} 胜过你的 ${catOf(hs)}。`}
+  else{R.stack=Math.round(pot/2);res=`平分底池（${catOf(hs)}）。`}
+  $('rMsg').textContent=res+' '+judge;
+  rLog(`#${R.hand} ${R.pos} ${key} 全下 vs ${caller} ${keyOf(vc[0],vc[1])} → ${hs>vs?'赢':hs<vs?'输':'平'} ${right?'✓':'✗'}`);
+  if(R.stack<=0)return rBust();
+  rUI();btns('next');
+}
+function rEnd(html){
+  $('rMsg').innerHTML=html+(R.dec<5?'<br><span class="note">这一场决策少于 5 次，不计入课程任务。</span>':'');
+  $('rStart').textContent='再来一次';btns('start');rUI();recordRun(R.dec?R.good/R.dec:0,R.dec);
+}
+function rBust(){
+  const place=R.left;setBest(place);rLog(`出局：第 ${place} 名`);
+  rEnd(`${$('rMsg').textContent}<br><b style="color:var(--brass)">你以第 ${place} 名出局${place<=PAID?'，进了钱圈！':'，差 '+(place-PAID)+' 名进钱圈。'}</b> 决策正确 ${R.good}/${R.dec}。`);
+}
+function rNext(){
+  R.left=Math.max(9,R.left-[0,0,1,1,1,2,2,3][Math.floor(Math.random()*8)]);
+  if(R.left<=9){setBest(9);rLog('进入决赛桌');rEnd(`<b style="color:var(--brass)">恭喜，你进入了决赛桌！</b> 100 人里活到了最后 9 人，决策正确 ${R.good}/${R.dec}。`);return}
+  rDeal();
+}
+$('rStart').onclick=rStart;$('rPush').onclick=()=>rAct(true);$('rFold').onclick=()=>rAct(false);$('rNext').onclick=rNext;
+
+/* ================= boot ================= */
+function renderAll(){drawStages();calcM();buildSliders();icmDraw();if(!R)renderSeats($('rSeats'),0);rUI();renderChips();dStats();if(curTab==='course')renderCourse();renderBanner()}
+renderChips();newSpot();renderAll();
+const h=(location.hash||'').slice(1);
+showTab(TABS.includes(h)?h:ls.get('tab','course'));
+setTimeout(initSync,0);
+})();
+</script>
+</body>
+</html>
