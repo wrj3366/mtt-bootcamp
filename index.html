@@ -927,7 +927,9 @@ function answer(v){
 const TABS=['course','drill','map','icm','run'];
 let curTab='course';
 const tabs=[...document.querySelectorAll('#tabs button')];
-function showTab(t){curTab=t;tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));TABS.forEach(x=>$('p-'+x).hidden=x!==t);ls.set('tab',t);if(t==='course')renderCourse();renderBanner();window.scrollTo({top:0,behavior:'auto'})}
+function showTab(t,boot){curTab=t;tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.t===t));TABS.forEach(x=>$('p-'+x).hidden=x!==t);ls.set('tab',t);if(t==='course')renderCourse();renderBanner();
+  // the viewer may scroll an outer frame, so bring the tab rail into view rather than relying on window.scrollTo
+  if(!boot){window.scrollTo({top:0,behavior:'auto'});$('tabs').scrollIntoView({block:'start',behavior:'auto'})}}
 tabs.forEach(b=>b.onclick=()=>{
   if(b.dataset.t==='drill'&&curTab!=='drill'){const A=activeLesson();const i=A?A.tasks.findIndex((t,i)=>t.t==='drill'&&!taskOk(A,i)):-1;if(i>=0){openDrill(A.tasks[i].d,A.tasks[i].f||null);return}}
   showTab(b.dataset.t)});
@@ -1127,7 +1129,7 @@ $('rStart').onclick=rStart;$('rPush').onclick=()=>rAct(true);$('rFold').onclick=
 function renderAll(){drawStages();calcM();buildSliders();icmDraw();if(!R)renderSeats($('rSeats'),0);rUI();renderChips();dStats();if(curTab==='course')renderCourse();renderBanner()}
 renderChips();newSpot();renderAll();
 const h=(location.hash||'').slice(1);
-showTab(TABS.includes(h)?h:ls.get('tab','course'));
+showTab(TABS.includes(h)?h:ls.get('tab','course'),true);
 setTimeout(initSync,0);
 })();
 </script>
