@@ -165,6 +165,15 @@ textarea{font-family:var(--f-body);font-weight:400;resize:vertical;min-height:70
 .banner{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--brass-deep);border-radius:12px;background:rgba(214,166,74,.08);font-size:13.5px}
 .sync{font:500 11px var(--f-mono);color:var(--muted)}
 
+/* quiz */
+.quizbox{display:grid;gap:10px;padding-top:4px}
+.quizbox .qq{font-size:16px;color:var(--ivory)}
+.qopts{display:grid;gap:8px}
+.qopt{text-align:left;background:#0a2219;border:1px solid var(--felt-line);color:var(--ink);border-radius:10px;padding:10px 14px;font:400 14.5px var(--f-body);cursor:pointer}
+.qopt:hover:not(:disabled){border-color:var(--brass-deep)}
+.qopt:disabled{cursor:default}
+.qopt.right{border-color:var(--good);background:rgba(95,201,138,.12)}
+.qopt.wrong{border-color:var(--bad);background:rgba(226,96,74,.12)}
 /* survival table */
 .felt{position:relative;border-radius:120px/90px;background:radial-gradient(ellipse at center,#17634b 0%,#0e4434 70%);border:10px solid #3b2615;box-shadow:inset 0 0 0 2px var(--brass-deep),0 20px 40px rgba(0,0,0,.4);padding:26px 18px;display:grid;gap:16px;justify-items:center;min-height:330px}
 @media (max-width:560px){.felt{border-radius:40px;border-width:6px}}
@@ -189,7 +198,7 @@ footer{margin-top:36px;color:var(--muted);font-size:12.5px;border-top:1px solid 
   <div>
     <div class="eyebrow">Multi-Table Tournament · 8 周课程</div>
     <h1>MTT 锦标赛训练营</h1>
-    <p class="lede">26 节课，分四个阶段，从规则和位置一直学到 ICM 和决赛桌。每节课先读要点，再去练习场完成任务，达到目标后自动解锁下一课。每天一节，大约 30 到 45 分钟。</p>
+    <p class="lede">26 节课，分四个阶段，从规则和位置一直学到 ICM 和决赛桌。每节课先复习前面的内容，再读要点、去练习场完成任务，最后做随堂测验，全部达标后自动解锁下一课。每天一节，大约 30 到 45 分钟。</p>
   </div>
   <div class="chipstack" aria-hidden="true"><div class="chip c3">100</div><div class="chip c2">500</div><div class="chip c1">1K</div><div class="chip c4">5K</div></div>
 </header>
@@ -658,6 +667,125 @@ const CURR=[
 ];
 const LESSONS=[];CURR.forEach((s,si)=>s.lessons.forEach(l=>{l.si=si;l.idx=LESSONS.length;LESSONS.push(l)}));
 
+/* question bank: [question, correct, wrong, wrong, wrong, explanation] */
+const QB={
+ l1:[['锦标赛里筹码输光后，可以补码继续打吗？','不能，输光就出局','可以随时补码','只要在第一级就能补','可以用之前赢的奖金补','MTT 的核心规则：筹码不能补，输光即出局。'],
+  ['为什么在锦标赛里“只等好牌”行不通？','盲注不断上涨，会慢慢吃掉筹码','好牌出现的概率太低，不值得等','规则禁止连续弃牌','弃牌太多会被罚盲注','盲注定时上涨，什么都不做筹码也会越来越少。'],
+  ['一般大约多少比例的玩家能进入奖励圈？','10% 到 15%','50% 左右','只有前 3 名','30% 到 40%','大多数比赛只奖励最后 10% 到 15% 的玩家。'],
+  ['随着比赛进行，平均筹码折合的大盲数通常会怎样？','越来越少','越来越多','保持不变','先变少再变多','盲注涨得比人数减少快，平均深度一路下降。'],
+  ['锦标赛的奖金分布有什么特点？','大头集中在前几名','进圈的人拿得一样多','按最后的筹码量平分','名次越靠后拿得越多','名次越靠前奖金越多，第一名通常拿 15% 到 25%。']],
+ l2:[['翻牌前第一个行动的是哪个位置？','枪口（UTG）','小盲','庄位','大盲','翻牌前从大盲左手边的枪口开始行动。'],
+  ['翻牌后永远最后行动的是哪个位置？','庄位（BTN）','大盲','枪口','小盲','翻牌后从小盲开始，庄位永远最后，所以庄位最好。'],
+  ['庄位顺时针的下一位是？','小盲','大盲','枪口','关煞位','顺序是庄位、小盲、大盲、枪口……'],
+  ['为什么前位要打得更紧？','身后还没行动的人多，碰到大牌的概率高','前位的筹码更少','前位必须先下注','前位不能弃牌','身后每多一个人，就多一个可能拿到大牌的对手。'],
+  ['翻牌前最后一个行动的是哪个位置？','大盲','庄位','小盲','关煞位','翻牌前大盲最后行动，翻牌后才轮到庄位最后。']],
+ l3:[['筹码 24,000，盲注 600/1,200，是多少个大盲？','20 BB','40 BB','12 BB','24 BB','24,000 ÷ 1,200 = 20。'],
+  ['筹码 15,000，盲注 500/1,000，大盲前注 1,000，M 值是多少？','6','15','10','7.5','15,000 ÷ (500 + 1,000 + 1,000) = 6。'],
+  ['M 值是 4，属于哪个区？','红区','橙区','黄区','绿区','M 小于 6 是红区。'],
+  ['红区的标准打法是？','只全下或弃牌','平跟看翻牌','小加注试探','只打 AA','筹码太短，加注后再弃牌代价太大，只剩推弃。'],
+  ['同样是 20,000 筹码，盲注从 100/200 涨到 1,000/2,000，大盲数怎么变？','从 100 BB 变成 10 BB','从 200 BB 变成 20 BB','从 100 BB 变成 50 BB','不变','筹码没变，但每个大盲贵了 10 倍。']],
+ l4:[['底池 100，对手下注 100（满池），你需要多少胜率才能跟？','33%','50%','25%','20%','100 ÷ (200 + 100) = 33%。'],
+  ['底池 60，对手下注 30（半池），所需胜率是？','25%','33%','50%','20%','30 ÷ (90 + 30) = 25%。'],
+  ['对手下注 2 倍底池，你需要多少胜率？','40%','50%','67%','33%','跟 2 份去赢 3 份，跟注后总底池 5 份：2 ÷ 5 = 40%。'],
+  ['你的胜率 30%，所需胜率 25%，应该怎么做？','跟注','弃牌','一定要加注','无法判断','胜率高于所需胜率，长期来看跟注赚钱。'],
+  ['公式里的“总底池”指的是？','跟注后的总底池，包括你的跟注','对手下注前的底池','只算对手的下注','只算你的跟注','所需胜率 = 跟注额 ÷ 跟注后的总底池。']],
+ l5:[['同花听牌有几张补牌？','9','8','4','13','同一花色 13 张，已经看到 4 张，还剩 9 张。'],
+  ['翻牌圈两头顺听牌，对手已经全下，你大约有多少胜率？','约 32%','约 16%','约 50%','约 8%','8 张补牌 × 4 ≈ 32%。'],
+  ['转牌圈同花听牌，只剩河牌，大约有多少胜率？','约 20%','约 36%','约 9%','约 50%','9 张补牌 × 2 ≈ 18%，准确值约 19.6%。'],
+  ['卡顺听牌有几张补牌？','4','8','9','6','只差中间一张，四种花色各一张。'],
+  ['为什么“补牌 × 4”只在对手全下时才准确？','因为你一定能看到两张牌，不用再付钱','因为全下时补牌更多','因为全下时胜率翻倍','其实没有区别','对手没全下时，转牌后你可能还要再付钱，甚至被迫弃牌。']],
+ l6:[['一种对子（比如 77）有多少种组合？','6','4','12','16','4 张 7 里选 2 张，有 6 种。'],
+  ['同花的 AK（AKs）有几种组合？','4','6','12','16','四种花色各一种。'],
+  ['不同花的 AK（AKo）有几种组合？','12','4','6','16','4 × 4 = 16 种 AK，减去 4 种同花，剩 12 种。'],
+  ['同花比不同花大约多多少胜率？','约 3%','约 15%','约 30%','没有区别','同花只增加一点点胜率，别高估它。'],
+  ['短码全下时，下面哪一手最好？','A2o','76s','J5o','98o','全下看摊牌胜率，带 A 的牌最有价值。']],
+ l8:[['12 BB 时加注到 2.2 BB，被人 3bet 全下后弃牌，损失了大约多少筹码？','约 18%','约 2%','约 50%','全部','2.2 ÷ 12 ≈ 18%，这就是短码不该小加注的原因。'],
+  ['全下的两种赚钱方式是？','对手弃牌直接赢底池，以及被跟注时还有胜率','只靠摊牌赢','只靠对手弃牌','靠平跟看便宜的翻牌','弃牌率加上摊牌胜率，共同构成全下的收益。'],
+  ['有大盲前注时，翻牌前底池里一开始有多少？','2.5 BB','1.5 BB','1 BB','3.5 BB','小盲 0.5 + 大盲 1 + 前注 1 = 2.5 BB。'],
+  ['短码时平跟（limp）是好选择吗？','不是，平跟放弃了让对手弃牌的机会','是，最安全','是，能看便宜的翻牌','只有在枪口位可以','平跟没有弃牌率，还会让你在翻牌后很被动。']],
+ l9:[['10 BB 时，哪个位置推得最宽？','小盲','庄位','关煞位','劫持位','小盲只需要过大盲一关。'],
+  ['小盲全下时，需要几个人弃牌才能直接赢？','1 个（大盲）','2 个','3 个','0 个','小盲身后只有大盲。'],
+  ['为什么大盲的跟注范围比其他人宽？','他已经投入了 1 BB，跟注更便宜','他的筹码最多','规则要求他跟注','他最后行动，所以牌更好','已经投入的钱让他获得更好的底池赔率。'],
+  ['10 BB 时庄位大约推多少比例的牌？','约 42%','约 13%','约 80%','约 25%','庄位身后只有两个盲注，可以推得很宽。']],
+ l10:[['10 BB 时枪口大约推多少比例的牌？','约 13%','约 42%','约 60%','约 5%','身后 8 个人，范围要紧。'],
+  ['为什么枪口要推得紧？','身后 8 个人，有人拿到大牌的概率高','枪口的筹码更少','枪口全下不能被跟注','枪口不用交前注','每多一个对手，被大牌跟注的风险就多一分。'],
+  ['枪口 10 BB 拿到 K8o（大约排在前 30%），应该怎么做？','弃牌','全下','平跟','加注到 2.2 BB','前 30% 远超枪口前 13% 的推荐范围。'],
+  ['在前位弃掉边缘牌，损失大吗？','不大，边缘牌的期望本来就接近 0','很大，应该都推','取决于运气','会被罚盲注','边缘牌推或弃差别很小，前位宁可保守。']],
+ l11:[['5 BB 时，每一圈的盲注加前注大约占你筹码的多少？','一半（2.5 BB）','10%','几乎没有','全部','2.5 ÷ 5 = 50%，等一圈就少一半。'],
+  ['筹码只有 4 BB，你在庄位，大部分牌应该怎么做？','全下','弃牌等好牌','平跟','加注到 2 BB','极短码时，庄位几乎什么牌都可以推。'],
+  ['你筹码极短时，对手的跟注范围会怎样？','变宽，所以你被跟注时胜率不会太差','变紧','不变','他们不会跟','对手赔率很好，会用很多一般的牌跟注。'],
+  ['为什么不要等到只剩 1 到 2 BB 才推？','那时几乎没有弃牌率，对手什么牌都会跟','规则禁止','1 BB 不能全下','盲注会下降','筹码太短，你的全下吓不走任何人。']],
+ l12:[['AK 全下被 QQ 跟注，AK 的胜率大约是？','46%','80%','20%','65%','两张高牌对一个更小的对子，略微落后。'],
+  ['评价自己的水平应该看什么？','决策正确率和长期成绩','单场名次','最后一手牌的结果','赢了多少手牌','单场结果运气成分太大。'],
+  ['一次正确的全下输了，说明什么？','正常的方差，决策依然正确','决策错了','应该换一套范围','对手作弊','结果不影响决策本身的好坏。'],
+  ['连输几手之后，最常见的错误是什么？','情绪化乱打','打得太紧','不看位置','跟注太少','“上头”之后最容易偏离正确范围。']],
+ l14:[['25 到 40 BB，你第一个入池，标准动作是？','加注到 2 到 2.2 BB，或者弃牌','平跟','全下','加注到 5 BB','中码第一个入池就主动加注，不平跟。'],
+  ['庄位大约开池多少比例的牌？','约 45%','约 13%','约 80%','约 25%','庄位身后只有两个盲注，开得很宽。'],
+  ['枪口拿到 K5o，应该怎么做？','弃牌','加注','平跟','全下','弱的不同花牌在前位直接弃。'],
+  ['筹码较深时，哪类牌更适合开池？','同花连张','小的不同花牌','不连的杂牌','都一样','同花连张翻牌后容易做成大牌。']],
+ l15:[['底池 2.5 BB，你加注 2.2 BB 偷盲，对手全部弃牌的概率至少要多少才盈利？','约 47%','约 90%','约 20%','约 70%','2.2 ÷ (2.2 + 2.5) ≈ 47%。'],
+  ['哪些位置最适合偷盲？','关煞位、庄位、小盲','枪口、枪口+1','大盲','中位','身后人少，偷盲成功率高。'],
+  ['盲注位的玩家很紧时，你应该怎么做？','偷得更多','偷得更少','不偷','只用 AA 偷','对手越容易弃牌，偷盲越赚钱。'],
+  ['遇到总是反击的大盲，应该怎么调整？','收紧偷盲范围','偷得更多','每手都全下','平跟','对手常反击时，弱牌偷盲会亏钱。']],
+ l16:[['15 BB 面对后位开池，最好的反击方式是？','3bet 全下','平跟','小额 3bet','永远弃牌','短码 3bet 全下，不给对手翻牌后操作的机会。'],
+  ['对手在哪个位置开池时，你可以反推得最宽？','小盲或庄位','枪口','中位','一样宽','后位开池范围宽，你的反推也可以宽。'],
+  ['为什么筹码超过 20 BB 时反推要更谨慎？','你冒的风险更大，而对手弃牌时你赢的相对更少','规则限制','对手不会跟注','胜率会降低','反推的风险和收益之比随筹码加深而变差。'],
+  ['15 BB 面对庄位开池，大约反推多少比例的牌？','约 18%','约 5%','约 50%','约 80%','对宽范围开池，可以用前 18% 左右的牌反推。']],
+ l17:[['你在庄位加注，大盲跟注，翻牌 A♠7♦2♣。这个牌面对谁有利？','你（加注者）','大盲','一样','看手牌才知道','加注范围里的 A 比大盲多得多。'],
+  ['翻牌 7♥6♥5♣ 对谁有利？','大盲','加注者','一样','无法判断','低而连接的牌面，大盲有更多顺子和两对。'],
+  ['为什么 A 高的牌面对加注者有利？','加注者范围里的 A 多得多','A 是最大的牌','大盲不可能有 A','这是规则','大盲常常会 3bet 他的强 A，跟注范围里 A 少。'],
+  ['公对牌面（比如 K♣K♦4♠）通常对谁有利？','加注者','大盲','一样','对双方都不利','双方都很难击中，范围更强的一方受益。']],
+ l18:[['有利牌面推荐的持续下注尺寸是？','约 1/3 底池','2 倍底池','全下','不下注','小注就能让对手的大部分空气牌弃牌。'],
+  ['不利牌面应该怎么打？','以过牌为主，用强牌和强听牌下大注','每次都下小注','每次都全下','总是弃牌','不利牌面不适合高频持续下注。'],
+  ['小注高频持续下注的好处是？','便宜地拿下很多底池','能骗对手全下','让对手看不懂','节省时间','对手没击中时，小注就足够让他弃牌。'],
+  ['持续下注被加注，而你没有强牌时，通常应该？','放弃','全下','跟注','再加注','被加注说明对手多半击中了，没有强牌就别硬撑。']],
+ l19:[['每场比赛应该挑哪 3 手牌复盘？','最大的底池、让你出局的那手、你犹豫最久的那手','赢得最多的 3 手','最后 3 手','随便 3 手','这三类最能暴露决策问题。'],
+  ['复盘时首先要写下什么？','位置和大盲数','对手的名字','输赢多少','牌的花色','几乎所有决策都从位置和大盲数出发。'],
+  ['复盘看的是什么？','决策是否正确','结果是否幸运','对手是否走运','发牌是否公平','复盘的对象是决策，不是结果。'],
+  ['只复盘输掉的牌会有什么问题？','会漏掉赢了但打错的牌','没有问题','会让人沮丧','会浪费时间','赢了的牌也可能打错，只是运气好。']],
+ l21:[['剩 4 人，奖金 50/30/20。你的筹码翻倍后，奖金权益会怎样？','增加，但不到翻倍','正好翻倍','不变','下降','赢光所有筹码也只能拿 50%，筹码的价值是递减的。'],
+  ['短码的奖金占比通常比他的筹码占比？','更高','更低','一样','是 0','短码还有机会熬到更高名次，奖金占比被“抬高”。'],
+  ['大码的奖金占比通常比他的筹码占比？','更低','更高','一样','是 100%','大码再多筹码也只能拿第一名的钱。'],
+  ['ICM 的核心结论是？','输掉筹码的损失大于赢得同样筹码的收益','筹码就是钱','只有第一名重要','短码应该乱推','这就是泡沫期要收紧的原因。']],
+ l22:[['泡沫因子 1.5 表示什么？','输一次的损失是赢一次收益的 1.5 倍','你需要 1.5 倍的筹码','盲注涨了 1.5 倍','胜率是 15%','泡沫因子 = 输掉的损失 ÷ 赢下的收益。'],
+  ['只看筹码时，跟注一个没有死钱的全下需要多少胜率？','50%','33%','60%','25%','输赢的筹码一样多，50% 就是盈亏平衡点。'],
+  ['泡沫因子是 2 时，大约需要多少胜率才能跟？','约 67%','50%','约 40%','约 80%','2 ÷ (1 + 2) ≈ 67%。'],
+  ['什么情况下泡沫因子最大？','对手筹码能覆盖你，输了你就出局','你的筹码比对手多很多','已经进了钱圈','只剩两个人单挑','出局意味着失去所有奖金权益。']],
+ l23:[['泡沫期谁最应该收紧？','中码','大码','短码','都一样','中码输了可能出局，赢了也只多一点，压力最大。'],
+  ['泡沫期大码应该怎么打？','多开池、多全下施压','收紧等好牌','只跟注不加注','主动和其他大码对抗','别人都怕跟大码，这是大码的特权。'],
+  ['中码面对大码全下，应该？','非常紧，只用强牌跟','抛硬币的牌就跟','总是跟','总是全下回去','被大码淘汰的代价太大。'],
+  ['短码离钱圈很近时，应该？','熬进钱圈有价值，但不能熬到失去弃牌率','必须马上全下','不用管','应该去和大码对抗','熬进钱圈和保持弃牌率之间要平衡。']],
+ l24:[['泡沫刚破时，短码通常会怎样？','集中全下','打得更紧','离开比赛','平跟','他们已经锁定最低奖金，开始搏翻倍。'],
+  ['泡沫破了之后，你的跟注范围可以怎样？','适当放宽','更紧','不变','只跟 AA','ICM 压力下降，可以接收短码的筹码。'],
+  ['奖金台阶附近，ICM 压力会怎样？','又变大','消失','变小','不变','每到奖金跳一档之前，大家又开始收紧。'],
+  ['为什么刚进钱圈是积累筹码的好机会？','短码乱推，你可以接收他们的筹码','盲注会下降','大家都不玩了','奖金翻倍','短码的全下范围很宽，跟注更容易盈利。']],
+ l25:[['决赛桌每手牌之前先看什么？','筹码分布：谁是短码，谁能淘汰你','自己手牌的花色','对手的表情','剩余时间','决赛桌的决策首先取决于筹码分布。'],
+  ['打到单挑时，ICM 的影响会怎样？','变小，可以回到按筹码打','变大','不变','必须多弃牌','只剩一档奖金差距，筹码价值接近线性。'],
+  ['短码还没出局时，中码应该？','避免轻易冒险，等短码先出局','主动和大码硬碰','每一手都全下','平跟','短码出局后你的名次就自动上升。'],
+  ['大码在决赛桌最该压迫谁？','中码','短码','另一个大码','谁都不压迫','中码最怕出局，最容易被逼弃牌。']]
+};
+const qOf=id=>(QB[id]||[]).map(a=>({q:a[0],o:a.slice(1,5),why:a[5],from:(LESSONS.find(l=>l.id===id)||{}).t}));
+LESSONS.forEach(L=>{
+  if(L.exam){
+    L.tasks.push(L.idx===LESSONS.length-1?{t:'quiz',src:'all',n:15,acc:.8}:{t:'quiz',src:'stage',n:10,acc:.8});
+  }else{
+    if(L.idx>0)L.tasks.unshift({t:'quiz',src:'review',n:4,acc:.75});
+    L.tasks.push({t:'quiz',src:'self',n:(QB[L.id]||[]).length,acc:.8});
+  }
+});
+function quizPool(L,t){
+  const prevIds=LESSONS.slice(0,L.idx).filter(l=>QB[l.id]).map(l=>l.id);
+  if(t.src==='self')return shuffle(qOf(L.id));
+  if(t.src==='review'){
+    const last=prevIds[prevIds.length-1],older=prevIds.slice(0,-1);
+    if(!older.length)return shuffle(qOf(last)).slice(0,t.n);
+    return shuffle([...shuffle(qOf(last)).slice(0,2),...shuffle(older.flatMap(qOf)).slice(0,t.n-2)]);
+  }
+  const ids=t.src==='stage'?LESSONS.filter(l=>l.si===L.si&&QB[l.id]).map(l=>l.id):Object.keys(QB);
+  return shuffle(ids.flatMap(qOf)).slice(0,t.n);
+}
+const quizNeed=t=>Math.ceil(t.n*t.acc-1e-9);
+
 /* ================= drills ================= */
 const ZONES=[{n:'绿区',c:'#5fc98a',min:20},{n:'黄区',c:'#e7b649',min:10},{n:'橙区',c:'#e48a3a',min:6},{n:'红区',c:'#e2604a',min:0}];
 const zoneOf=M=>ZONES.findIndex(z=>M>=z.min);
@@ -783,6 +911,7 @@ function taskOk(L,i){
   if(t.t==='visit')return t.k==='stages'?P.visit.stages.length>=5:t.k==='icm'?P.visit.icm.length>=3:!!P.visit.mcalc;
   if(t.t==='check')return !!s.checked;
   if(t.t==='note')return !!(lp(L.id).note||'').trim();
+  if(t.t==='quiz')return !!s.ok;
   return false;
 }
 const lessonDone=L=>lp(L.id).done;
@@ -819,6 +948,7 @@ function visited(){save();checkDone(activeLesson());renderBanner()}
 
 function taskLabel(t){
   if(t.label)return t.label;
+  if(t.t==='quiz')return {self:`随堂测验：本课 ${t.n} 题，至少答对 ${quizNeed(t)} 题`,review:`复习前面的课：随机 ${t.n} 题，至少答对 ${quizNeed(t)} 题`,stage:`概念测验：本阶段随机 ${t.n} 题，至少答对 ${quizNeed(t)} 题`,all:`概念测验：全课程随机 ${t.n} 题，至少答对 ${quizNeed(t)} 题`}[t.src];
   return `练习场 · ${DRILLS[t.d].name}${t.f?'（'+fLabel(t.f)+'）':''}：最近 ${t.n} 题正确率 ≥ ${Math.round(t.acc*100)}%`;
 }
 function taskProgress(L,i){
@@ -826,6 +956,7 @@ function taskProgress(L,i){
   if(t.t==='drill'){const w=s.w||[];const acc=w.length?Math.round(w.reduce((a,b)=>a+b,0)/w.length*100):null;
     return {frac:s.ok?1:Math.min(1,w.length/t.n)*(acc!=null&&acc>=t.acc*100?1:.9),txt:s.ok?'已达标':`${w.length}/${t.n} 题${acc!=null?' · 正确率 '+acc+'%':''}`}}
   if(t.t==='run'){const g=(s.games||[]).filter(a=>a>=t.acc).length,last=(s.games||[]).slice(-1)[0];return {frac:Math.min(1,g/t.games),txt:`${Math.min(g,t.games)}/${t.games} 场达标${last!=null?' · 最近一场决策正确率 '+Math.round(last*100)+'%':''}`}}
+  if(t.t==='quiz')return {frac:s.ok?1:(s.best||0)/t.n,txt:s.ok?`已通过 · 最好成绩 ${s.best}/${t.n}`:s.best!=null?`最好成绩 ${s.best}/${t.n} · 还没达标`:'还没开始'};
   if(t.t==='visit'){if(t.k==='stages')return {frac:P.visit.stages.length/5,txt:`${P.visit.stages.length}/5 个阶段`};if(t.k==='icm')return {frac:P.visit.icm.length/3,txt:`${P.visit.icm.length}/3 个预设`};return {frac:P.visit.mcalc?1:0,txt:P.visit.mcalc?'已完成':'未开始'}}
   return null;
 }
@@ -871,15 +1002,51 @@ function renderCourse(){
   if(!isCur&&!st.done)tl.innerHTML='<p class="note">先完成前面的课程，这里的任务才会开始计数。</p>';
   L.tasks.forEach((t,i)=>{
     const ok=taskOk(L,i),pr=taskProgress(L,i),d=document.createElement('div');d.className='task'+(ok?' ok':'');
-    const go=t.t==='drill'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="drill">${ok?'再练练':'去练习'}</button>`:t.t==='run'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="run">去生存挑战</button>`:t.t==='visit'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="${t.k==='icm'?'icm':'map'}">去看看</button>`:'';
+    const go=t.t==='quiz'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="quiz">${ok?'再测一次':(lp(L.id).tasks[i]||{}).best!=null?'重新测验':'开始测验'}</button>`:t.t==='drill'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="drill">${ok?'再练练':'去练习'}</button>`:t.t==='run'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="run">去生存挑战</button>`:t.t==='visit'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="${t.k==='icm'?'icm':'map'}">去看看</button>`:'';
     const chk=t.t==='check'?`<input type="checkbox" id="chk${i}" ${ok?'checked':''} ${isCur||ok?'':'disabled'}>`:`<span class="dot ${ok?'done':''}" style="flex:0 0 auto">${ok?'✓':i+1}</span>`;
     d.innerHTML=`<div class="top"><label class="lab" ${t.t==='check'?`for="chk${i}"`:''}>${chk}<span>${taskLabel(t)}</span></label>${isCur||ok?go:''}</div>${pr?`<div class="meter ${ok?'good':''}"><i style="width:${Math.round(pr.frac*100)}%"></i></div><div class="note mono">${pr.txt}</div>`:''}`;
     tl.appendChild(d);
     const btn=d.querySelector('[data-go]');
-    if(btn)btn.onclick=()=>{if(btn.dataset.go==='drill')openDrill(t.d,t.f||null);else showTab(btn.dataset.go)};
+    if(btn)btn.onclick=()=>{if(btn.dataset.go==='quiz'){btn.hidden=true;startQuiz(L,i,d,isCur)}else if(btn.dataset.go==='drill')openDrill(t.d,t.f||null);else showTab(btn.dataset.go)};
     const cb=d.querySelector('input[type=checkbox]');
     if(cb)cb.onchange=()=>{const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={});s.checked=cb.checked;save();checkDone(L);renderCourse()};
   });
+}
+
+/* ================= quiz runner ================= */
+function startQuiz(L,i,card,counts){
+  const t=L.tasks[i],qs=quizPool(L,t),need=quizNeed(t);let k=0,right=0;
+  const box=document.createElement('div');box.className='quizbox';card.appendChild(box);
+  const step=()=>{
+    if(k>=qs.length)return finish();
+    const q=qs[k];let answered=false;
+    box.innerHTML=`<div class="note mono">第 ${k+1}/${qs.length} 题${t.src!=='self'?' · 来自：'+q.from:''} · 已答对 ${right}</div><p class="qq"></p><div class="qopts"></div><div class="qfb"></div>`;
+    box.querySelector('.qq').textContent=q.q;
+    const wrap=box.querySelector('.qopts'),fb=box.querySelector('.qfb');
+    shuffle(q.o.map((x,j)=>({x,ok:j===0}))).forEach(o=>{
+      const b=document.createElement('button');b.className='qopt';b.textContent=o.x;o.el=b;
+      b.onclick=()=>{
+        if(answered)return;answered=true;if(o.ok)right++;
+        wrap.querySelectorAll('.qopt').forEach(x=>{x.disabled=true});
+        b.classList.add(o.ok?'right':'wrong');
+        if(!o.ok)[...wrap.children].find(x=>x.textContent===q.o[0]).classList.add('right');
+        fb.innerHTML=`<div class="verdict ${o.ok?'ok':'no'}" style="padding:10px 14px"><span class="tag">${o.ok?'正确':'答错了'}</span><p style="margin-top:4px"></p></div><div class="row" style="margin-top:10px"><button class="btn gold sm">${k+1<qs.length?'下一题 →':'看结果'}</button></div>`;
+        fb.querySelector('p').textContent=q.why;
+        const nb=fb.querySelector('button');nb.onclick=()=>{k++;step()};nb.focus({preventScroll:true});
+      };
+      wrap.appendChild(b);
+    });
+  };
+  const finish=()=>{
+    const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={});
+    const pass=right>=need;
+    s.best=Math.max(s.best||0,right);
+    if(pass&&counts)s.ok=true;
+    save();if(counts)checkDone(L);
+    box.innerHTML=`<div class="verdict ${pass?'ok':'no'}"><span class="tag">${pass?'通过':'还差一点'}</span><p style="margin-top:6px">答对 <b class="mono">${right}/${qs.length}</b>，${pass?'达到要求。':`需要至少答对 ${need} 题。题目和选项顺序会重新打乱，再试一次吧。`}</p></div><div class="row" style="margin-top:10px"><button class="btn gold sm" id="qDone">${pass?'继续':'重新测验'}</button></div>`;
+    $('qDone').onclick=()=>{if(pass)renderCourse();else{k=0;right=0;qs.splice(0,qs.length,...quizPool(L,t));step()}};
+  };
+  step();
 }
 
 /* ================= banner ================= */
