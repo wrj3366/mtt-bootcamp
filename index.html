@@ -1004,10 +1004,10 @@ function renderCourse(){
     const ok=taskOk(L,i),pr=taskProgress(L,i),d=document.createElement('div');d.className='task'+(ok?' ok':'');
     const go=t.t==='quiz'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="quiz">${ok?'再测一次':(lp(L.id).tasks[i]||{}).best!=null?'重新测验':'开始测验'}</button>`:t.t==='drill'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="drill">${ok?'再练练':'去练习'}</button>`:t.t==='run'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="run">去生存挑战</button>`:t.t==='visit'?`<button class="btn ${ok?'ghost':'gold'} sm" data-go="${t.k==='icm'?'icm':'map'}">去看看</button>`:'';
     const chk=t.t==='check'?`<input type="checkbox" id="chk${i}" ${ok?'checked':''} ${isCur||ok?'':'disabled'}>`:`<span class="dot ${ok?'done':''}" style="flex:0 0 auto">${ok?'✓':i+1}</span>`;
-    d.innerHTML=`<div class="top"><label class="lab" ${t.t==='check'?`for="chk${i}"`:''}>${chk}<span>${taskLabel(t)}</span></label>${isCur||ok?go:''}</div>${pr?`<div class="meter ${ok?'good':''}"><i style="width:${Math.round(pr.frac*100)}%"></i></div><div class="note mono">${pr.txt}</div>`:''}`;
+    d.innerHTML=`<div class="top"><label class="lab" ${t.t==='check'?`for="chk${i}"`:''}>${chk}<span>${taskLabel(t)}</span></label>${isCur||ok||t.t==='quiz'?go:''}</div>${pr?`<div class="meter ${ok?'good':''}"><i style="width:${Math.round(pr.frac*100)}%"></i></div><div class="note mono">${pr.txt}</div>`:''}`;
     tl.appendChild(d);
     const btn=d.querySelector('[data-go]');
-    if(btn)btn.onclick=()=>{if(btn.dataset.go==='quiz'){btn.hidden=true;startQuiz(L,i,d,isCur)}else if(btn.dataset.go==='drill')openDrill(t.d,t.f||null);else showTab(btn.dataset.go)};
+    if(btn)btn.onclick=()=>{if(btn.dataset.go==='quiz'){btn.hidden=true;startQuiz(L,i,d,isCur||st.done)}else if(btn.dataset.go==='drill')openDrill(t.d,t.f||null);else showTab(btn.dataset.go)};
     const cb=d.querySelector('input[type=checkbox]');
     if(cb)cb.onchange=()=>{const s=lp(L.id).tasks[i]||(lp(L.id).tasks[i]={});s.checked=cb.checked;save();checkDone(L);renderCourse()};
   });
