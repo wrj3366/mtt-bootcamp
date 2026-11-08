@@ -955,7 +955,8 @@ function taskProgress(L,i){
   if(t.t==='visit'){if(t.k==='stages')return {frac:P.visit.stages.length/5,txt:`${P.visit.stages.length}/5 个阶段`};if(t.k==='icm')return {frac:P.visit.icm.length/3,txt:`${P.visit.icm.length}/3 个预设`};return {frac:P.visit.mcalc?1:0,txt:P.visit.mcalc?'已完成':'未开始'}}
   return null;
 }
-let viewId=null;
+let viewId=null,courseRead=false;
+const phone=()=>matchMedia('(max-width:640px)').matches;
 const D={id:'push',f:null,spot:null,done:false};
 const TABS=['course','sim','drill','map','icm','run'];
 let curTab='course';
@@ -1766,6 +1767,8 @@ get visited(){return visited},
 get taskLabel(){return taskLabel},
 get taskProgress(){return taskProgress},
 get viewId(){return viewId},set viewId(v){viewId=v},
+get courseRead(){return courseRead},set courseRead(v){courseRead=v},
+get phone(){return phone},
 get D(){return D},
 get TABS(){return TABS},
 get curTab(){return curTab},set curTab(v){curTab=v},
