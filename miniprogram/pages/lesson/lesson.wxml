@@ -1,0 +1,55 @@
+<view class="wrap">
+  <view class="panel">
+    <view class="eyebrow">{{eyebrow}}</view>
+    <view class="h1 mt6">{{title}}</view>
+    <rich-text class="rt learn" nodes="{{learn}}" style="display:block;margin-top:12px" user-select="true"></rich-text>
+  </view>
+
+  <view class="panel">
+    <view class="row between"><view class="h3">本课任务</view><view wx:if="{{done}}" class="pill done">已完成</view></view>
+    <view wx:if="{{waiting}}" class="note mt6">先完成前面的课程，这里的任务才会开始计数。</view>
+    <view class="tasks">
+      <view wx:for="{{tasks}}" wx:key="i" class="task {{item.ok ? 'ok' : ''}}">
+        <view class="row" style="flex-wrap:nowrap;align-items:flex-start">
+          <view wx:if="{{item.check}}" class="cb {{item.ok ? 'on' : ''}} {{item.canCheck ? '' : 'dis'}}" data-i="{{index}}" bindtap="onCheck">{{item.ok ? '✓' : ''}}</view>
+          <view wx:else class="dot {{item.ok ? 'done' : ''}}">{{item.ok ? '✓' : index + 1}}</view>
+          <view style="flex:1;min-width:0;font-size:14px" data-i="{{index}}" bindtap="onLabel">{{item.label}}</view>
+        </view>
+        <block wx:if="{{item.frac !== null}}">
+          <view class="meter {{item.ok ? 'good' : ''}}"><view class="bar" style="width:{{item.frac}}%"></view></view>
+          <view class="note mono" style="font-size:12px">{{item.txt}}</view>
+        </block>
+        <view wx:if="{{item.go && !(quiz && quiz.ti === index)}}" class="row"><view class="btn {{item.ok ? 'ghost' : 'gold'}} sm" hover-class="hov" data-i="{{index}}" bindtap="onGo">{{item.go.l}}</view></view>
+
+        <view wx:if="{{quiz && quiz.ti === index}}" class="quizbox">
+          <block wx:if="{{!quiz.result}}">
+            <view class="note mono">{{quiz.head}}</view>
+            <view class="qq">{{quiz.q}}</view>
+            <view wx:for="{{quiz.opts}}" wx:key="x" wx:for-item="o" wx:for-index="j" class="qopt {{o.cls}}" hover-class="{{quiz.answered ? '' : 'hov'}}" data-j="{{j}}" bindtap="onOpt">{{o.x}}</view>
+            <block wx:if="{{quiz.answered}}">
+              <view class="verdict {{quiz.good ? 'ok' : 'no'}}"><view class="tag">{{quiz.good ? '正确' : '答错了'}}</view><view class="mt6" style="font-size:14px">{{quiz.why}}</view></view>
+              <view class="row"><view class="btn gold sm" hover-class="hov" bindtap="onQNext">{{quiz.last ? '看结果' : '下一题 →'}}</view></view>
+            </block>
+          </block>
+          <block wx:else>
+            <view class="verdict {{quiz.pass ? 'ok' : 'no'}}"><view class="tag">{{quiz.pass ? '通过' : '还差一点'}}</view><view class="mt6">{{quiz.txt}}</view></view>
+            <view class="row"><view class="btn gold sm" hover-class="hov" bindtap="onQDone">{{quiz.pass ? '继续' : '重新测验'}}</view></view>
+          </block>
+        </view>
+      </view>
+    </view>
+    <view class="f mt14">一句话总结今天学到的东西（{{needNote ? '本课需要填写' : '可选'}}）
+      <textarea class="ta" value="{{note}}" bindinput="onNote" maxlength="500" placeholder="例如：庄位 10 BB 可以推前 42% 的牌，身后人越少推得越宽。" placeholder-style="color:#5f7a6d" />
+    </view>
+    <view class="row between mt14">
+      <view class="row">
+        <view wx:if="{{prev}}" class="btn ghost" hover-class="hov" bindtap="onPrev">← 上一课</view>
+        <view wx:if="{{next}}" class="btn ghost" hover-class="hov" bindtap="onNext">下一课 →</view>
+      </view>
+      <block wx:if="{{isCur}}">
+        <view wx:if="{{!skipAsk}}" class="btn ghost" hover-class="hov" bindtap="onSkip">我已掌握，跳过本课</view>
+        <view wx:else class="row"><text class="note">确定跳过？</text><view class="btn gold sm" bindtap="onSkipYes">确定</view><view class="btn ghost" bindtap="onSkipNo">取消</view></view>
+      </block>
+    </view>
+  </view>
+</view>

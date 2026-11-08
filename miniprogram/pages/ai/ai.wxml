@@ -1,0 +1,21 @@
+<view class="wrap">
+  <view class="panel">
+    <view class="h2">接入 AI 教练（可选）</view>
+    <view class="note mt6">填写 OpenAI 兼容的接口，比如 DeepSeek、通义千问、Kimi、智谱、硅基流动、豆包。不填也能用：规则教练照常判断每一步。</view>
+    <view class="form mt10">
+      <view class="f">服务商<picker range="{{presetL}}" value="{{pi}}" bindchange="onPreset"><view class="picker">{{presetL[pi]}}</view></picker></view>
+      <view class="f">接口地址<input class="input" value="{{base}}" data-k="base" bindinput="onField" placeholder="https://..." placeholder-style="color:#5f7a6d" /></view>
+      <view class="f">模型<input class="input" value="{{model}}" data-k="model" bindinput="onField" placeholder="{{modelPh}}" placeholder-style="color:#5f7a6d" /></view>
+      <view class="f">API Key<input class="input" password="true" value="{{key}}" data-k="key" bindinput="onField" placeholder="sk-..." placeholder-style="color:#5f7a6d" /></view>
+      <view class="row between"><text>选错时自动讲解</text><switch checked="{{coach}}" color="#d6a64a" data-k="coach" bindchange="onSwitch" /></view>
+      <view class="row between"><text>让 AI 扮演对手（较慢）</text><switch checked="{{opp}}" color="#d6a64a" data-k="opp" bindchange="onSwitch" /></view>
+      <view class="row between"><text>比赛结束后自动复盘</text><switch checked="{{review}}" color="#d6a64a" data-k="review" bindchange="onSwitch" /></view>
+    </view>
+    <view class="row mt14"><view class="btn gold sm" hover-class="hov" bindtap="onTest">测试连接</view><view class="btn ghost sm" bindtap="onClear">清除 API Key</view></view>
+    <view class="{{stCls}} mt10" style="font-size:13px">{{status}}</view>
+  </view>
+  <view class="panel note">
+    <view>API Key 只保存在这台手机的微信里，只会发送到你填写的接口地址。</view>
+    <view class="mt6">小程序只能访问在微信公众平台登记过的域名：到“开发管理 → 开发设置 → 服务器域名”，把接口域名（比如 https://api.deepseek.com）加到 request 合法域名里。只是自己用的话，也可以在手机上打开小程序的“开发调试”，或在开发者工具里勾选“不校验合法域名”。</view>
+  </view>
+</view>

@@ -1,0 +1,41 @@
+<view class="wrap">
+  <view wx:if="{{banner}}" class="banner"><b>{{banner.title}}</b><text class="note"> · {{banner.txt}}</text></view>
+  <view class="panel">
+    <view class="eyebrow">Independent Chip Model</view>
+    <view class="h2 mt6">筹码不等于钱</view>
+    <view class="note mt6">锦标赛奖金按名次发，赢光所有筹码也只能拿第一名的钱。所以筹码翻倍，奖金权益却不会翻倍；输光筹码的损失，比赢下同样筹码的收益更大。ICM 用每个人的筹码占比，推算每人能拿到多少奖金。</view>
+    <view class="h3 mt14">泡沫期：剩 4 人，奖励前 3 名</view>
+    <view class="pays mt6">
+      <view wx:for="{{pay}}" wx:key="index" class="f">第 {{index + 1}} 名 %<input class="input" type="number" value="{{item}}" data-i="{{index}}" bindinput="onPay" /></view>
+    </view>
+    <view class="row mt10"><view wx:for="{{presets}}" wx:key="id" class="btn ghost sm" hover-class="hov" data-i="{{index}}" bindtap="onPreset">{{item.l}}</view></view>
+    <view wx:for="{{players}}" wx:key="n" class="mt10">
+      <view class="row between"><text>玩家 {{item.n}}</text><text class="mono" style="color:var(--ivory)">{{item.sl}}</text></view>
+      <slider min="1000" max="60000" step="1000" value="{{item.s}}" activeColor="#d6a64a" backgroundColor="#173329" block-size="20" data-i="{{index}}" bindchange="onSlide" />
+    </view>
+  </view>
+  <view class="panel">
+    <view class="h3">筹码占比 vs 奖金权益</view>
+    <view class="legend mt6"><view><text class="sw" style="background:#6f8f80"></text>筹码%</view><view><text class="sw" style="background:#d6a64a"></text>奖金%</view></view>
+    <view wx:for="{{players}}" wx:key="n" class="barrow">
+      <text class="mono" style="font-size:13px;width:56px">{{item.n}}</text>
+      <view style="flex:1;min-width:0">
+        <view class="bar chipb" style="width:{{item.cw}}%"></view>
+        <view class="bar icmb" style="width:{{item.ew}}%"></view>
+        <view class="note mono" style="font-size:11.5px">{{item.txt}} <text style="color:{{item.up ? 'var(--good)' : 'var(--bad)'}}">{{item.d}}</text></view>
+      </view>
+    </view>
+  </view>
+  <view class="panel">
+    <view class="eyebrow">泡沫因子</view>
+    <view class="h3 mt6">对手全下，你（玩家 A）要多少胜率才值得跟注？</view>
+    <view class="f mt10">谁全下了<picker range="{{vilL}}" value="{{vil}}" bindchange="onVil"><view class="picker">{{vilL[vil]}}</view></picker></view>
+    <view class="mt10">
+      <view wx:for="{{call.rows}}" wx:key="index" class="kv"><text>{{item[0]}}</text><text class="v">{{item[1]}}</text></view>
+      <view class="kv"><text>考虑 ICM 需要胜率</text><text class="v" style="color:var(--brass);font-size:18px">{{call.need}}</text></view>
+      <view class="kv"><text>泡沫因子</text><text class="v">{{call.bf}}</text></view>
+    </view>
+    <view class="mt10" style="font-size:14px">泡沫因子 = 输掉时的损失 ÷ 赢下时的收益。这里是 <b>{{call.bf}}</b>，输掉一次的痛，相当于赢下一次的 {{call.bf}} 倍。</view>
+    <view class="mt6" style="font-size:14px">所以即使是“抛硬币”的 AK vs QQ，在泡沫期你也常常应该弃牌。{{call.cover ? '对手筹码能覆盖你，输了你就出局，这是最危险的情况。' : '对手筹码比你少，输了你也不会出局，所以压力小一些。'}}</view>
+  </view>
+</view>

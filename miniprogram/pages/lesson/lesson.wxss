@@ -1,0 +1,11 @@
+.tasks{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.task{display:flex;flex-direction:column;gap:8px;padding:11px 12px;border:1px solid var(--felt-line);border-radius:12px}
+.task.ok{border-color:rgba(95,201,138,.6)}
+.cb{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--felt-line);flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:13px;color:#06301c;margin-top:2px}
+.cb.on{background:var(--good);border-color:var(--good)}
+.cb.dis{opacity:.4}
+.quizbox{display:flex;flex-direction:column;gap:9px;padding-top:4px}
+.qq{font-size:16px;color:var(--ivory)}
+.qopt{background:#0a2219;border:1px solid var(--felt-line);color:var(--ink);border-radius:10px;padding:9px 12px;font-size:14.5px}
+.qopt.right{border-color:var(--good);background:rgba(95,201,138,.12)}
+.qopt.wrong{border-color:var(--bad);background:rgba(226,96,74,.12)}

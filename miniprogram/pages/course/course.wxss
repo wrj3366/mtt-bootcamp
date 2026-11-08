@@ -1,0 +1,13 @@
+.trackbar{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.trk{background:rgba(4,22,15,.55);border:1px solid var(--felt-line);border-radius:14px;padding:10px 12px}
+.trk.on{border-color:var(--brass);background:rgba(214,166,74,.12)}
+.trk-n{font-size:16px;font-weight:900;color:var(--ink)}
+.ov{display:flex;gap:16px;align-items:center}
+.ring{width:72px;height:72px;border-radius:50%;border:5px solid var(--brass);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ring-t{font:500 17px var(--mono);color:var(--ivory)}
+.stagehead{font:500 12px var(--mono);letter-spacing:.1em;color:var(--brass);margin:14px 0 4px}
+.stagehead:first-child{margin-top:0}
+.lrow{display:flex;gap:10px;align-items:center;padding:8px 4px;border-radius:10px;font-size:14px}
+.lrow .lt{flex:1;min-width:0}
+.lrow.lock{color:#5f7a6d}
+.lrow.cur{background:rgba(214,166,74,.10)}

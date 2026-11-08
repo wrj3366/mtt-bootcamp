@@ -1,0 +1,4 @@
+.pays{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.barrow{display:flex;gap:8px;align-items:center;margin-top:10px}
+.bar{height:11px;border-radius:3px;margin-bottom:3px}
+.chipb{background:#6f8f80}.icmb{background:var(--brass)}

@@ -1,0 +1,7 @@
+<view class="wrap">
+  <view wx:for="{{items}}" wx:key="p" class="panel" hover-class="hov" data-p="{{item.p}}" bindtap="onGo">
+    <view class="row between"><view class="h3">{{item.t}}</view><text wx:if="{{item.p === 'ai'}}" class="pill {{aiOn ? 'done' : ''}}">{{aiOn ? '已设置' : '未设置'}}</text><text wx:else class="note">›</text></view>
+    <view class="note mt6">{{item.d}}</view>
+  </view>
+  <view class="note" style="padding:0 4px">推弃、开池和反推范围是按手牌强度排序、参照常见纳什比例近似生成的教学版本；现金局 6 人桌范围参考常见的 100 BB 打法简化而来。适合建立直觉，实战中还要考虑对手倾向、筹码分布和 ICM。</view>
+</view>

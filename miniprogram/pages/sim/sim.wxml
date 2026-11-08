@@ -1,0 +1,155 @@
+<view class="wrap">
+  <view wx:if="{{banner && view !== 'end'}}" class="banner"><b>{{banner.title}}</b><text class="note"> · {{banner.txt}}</text></view>
+
+  <!-- pick a game -->
+  <block wx:if="{{view === 'pick'}}">
+    <view class="pickcol">
+      <view class="panel" style="order:{{cashFirst ? 1 : 0}}">
+        <view class="eyebrow">完整锦标赛</view>
+        <view class="h2 mt6">打一场完整的 9 人桌 MTT</view>
+        <view class="note mt6">从第一级盲注开始一手一手打：盲注定时上涨，其他桌不断有人出局，空位会有玩家移过来；你会经历泡沫期、钱圈和决赛桌，直到出局或夺冠。每一次决策都有教练判断，每打完一手自动存档。</view>
+        <view wx:if="{{mttSave}}" class="resume">
+          <view><b>上次的比赛还没打完</b><view class="note">{{mttSave}}</view></view>
+          <view class="row mt6"><view class="btn gold" hover-class="hov" data-m="mtt" bindtap="onResume">继续比赛</view><view class="btn ghost sm" data-m="mtt" bindtap="onDrop">放弃这场</view></view>
+        </view>
+        <view class="form mt10">
+          <view class="f">参赛人数<picker range="{{PICK.fieldL}}" value="{{mi.field}}" data-k="mi.field" bindchange="onPick"><view class="picker">{{PICK.fieldL[mi.field]}}</view></picker></view>
+          <view class="f">起始筹码<picker range="{{PICK.bbL}}" value="{{mi.bb}}" data-k="mi.bb" bindchange="onPick"><view class="picker">{{PICK.bbL[mi.bb]}}</view></picker></view>
+          <view class="f">盲注速度<picker range="{{PICK.hplL}}" value="{{mi.hpl}}" data-k="mi.hpl" bindchange="onPick"><view class="picker">{{PICK.hplL[mi.hpl]}}</view></picker></view>
+        </view>
+        <view class="btn {{mttSave ? 'ghost' : 'gold'}} block mt10" hover-class="hov" bindtap="onMttStart">{{mttSave ? '开始新比赛（会覆盖上面的存档）' : '开始比赛'}}</view>
+      </view>
+
+      <view class="panel" style="order:{{cashFirst ? 0 : 1}}">
+        <view class="eyebrow">现金局 · 6 人桌 · 100 BB</view>
+        <view class="h2 mt6">坐上一张 6 人现金桌</view>
+        <view class="note mt6">盲注固定，没有前注，买入 100 BB。教练按 6 人桌的开池、3bet、大盲防守范围判断翻牌前的每个决定。统计盈亏、bb/100、入池率（VPIP）和翻牌前加注率（PFR），每打完一手自动存档。</view>
+        <view wx:if="{{cashSave}}" class="resume">
+          <view><b>上次的现金桌还没离开</b><view class="note">{{cashSave}}</view></view>
+          <view class="row mt6"><view class="btn gold" hover-class="hov" data-m="cash" bindtap="onResume">回到牌桌</view><view class="btn ghost sm" data-m="cash" bindtap="onDrop">放弃这场</view></view>
+        </view>
+        <view class="form mt10">
+          <view class="f">打多少手<picker range="{{PICK.handsL}}" value="{{ci.hands}}" data-k="ci.hands" bindchange="onPick"><view class="picker">{{PICK.handsL[ci.hands]}}</view></picker></view>
+          <view class="f">对手<picker range="{{PICK.mixL}}" value="{{ci.mix}}" data-k="ci.mix" bindchange="onPick"><view class="picker">{{PICK.mixL[ci.mix]}}</view></picker></view>
+          <view class="row between"><text class="note">低于 100 BB 自动补满</text><switch checked="{{ci.topup}}" color="#d6a64a" bindchange="onTopup" /></view>
+        </view>
+        <view class="btn {{cashSave ? 'ghost' : 'gold'}} block mt10" hover-class="hov" bindtap="onCashStart">{{cashSave ? '开一张新桌（会覆盖上面的存档）' : '入座'}}</view>
+      </view>
+
+      <view class="panel" style="order:2">
+        <view class="eyebrow">锦标赛专项训练</view>
+        <view wx:for="{{scns}}" wx:key="k" class="scn" hover-class="hov" data-k="{{item.k}}" bindtap="onScn">
+          <view class="mono" style="font-size:11px;color:var(--brass)">{{item.sub}}</view>
+          <view class="h3">{{item.n}}</view>
+          <view class="note">{{item.desc}}</view>
+          <view class="note mono" style="font-size:11px">{{item.len}}</view>
+        </view>
+      </view>
+
+      <view class="panel" style="order:3">
+        <view class="h3">最近成绩</view>
+        <view wx:if="{{!hist.length}}" class="note mt6">还没有比赛记录。</view>
+        <view wx:for="{{hist}}" wx:key="index" class="kv"><text>{{item.t}}</text><text class="v">{{item.acc}}%</text></view>
+      </view>
+    </view>
+  </block>
+
+  <!-- at the table -->
+  <block wx:if="{{view === 'play'}}">
+    <rich-text nodes="{{table}}" style="display:block"></rich-text>
+
+    <view class="actbar">
+      <view wx:if="{{act.mode === 'next'}}" class="row center"><view class="btn gold" hover-class="hov" bindtap="onNext">下一手</view></view>
+      <view wx:if="{{act.mode === 'wait'}}" class="note" style="text-align:center">{{act.txt}}</view>
+      <block wx:if="{{act.mode === 'act'}}">
+        <view class="acts">
+          <view wx:if="{{act.fold}}" class="btn fold" hover-class="hov" data-a="fold" bindtap="onAct">弃牌</view>
+          <view class="btn fold" hover-class="hov" data-a="{{act.callType}}" bindtap="onAct">{{act.callLbl}}</view>
+          <view wx:if="{{act.raise}}" class="btn push" hover-class="hov" data-a="raise" bindtap="onAct">{{act.raiseWord}} {{act.lbl}}</view>
+          <view class="btn push" hover-class="hov" data-a="allin" bindtap="onAct">{{act.allinLbl}}</view>
+        </view>
+        <block wx:if="{{act.raise}}">
+          <slider min="{{act.min}}" max="{{act.max}}" step="{{act.step}}" value="{{act.val}}" activeColor="#d6a64a" backgroundColor="#173329" block-size="22" bindchanging="onRaiseSlide" bindchange="onRaiseSlide" />
+          <view class="row center"><view wx:for="{{act.presets}}" wx:key="l" class="btn ghost sm" data-to="{{item.to}}" bindtap="onPreset">{{item.l}}</view><view class="btn ghost sm" bindtap="onHint">提示</view></view>
+        </block>
+        <view wx:else class="row center mt6"><view class="btn ghost sm" bindtap="onHint">提示</view></view>
+      </block>
+    </view>
+
+    <view class="panel">
+      <view wx:if="{{coach.type === 'intro'}}" class="note">每次轮到你行动，系统都会判断你的选择，并在这里给出理由。行动前可以点“提示”看推荐。</view>
+      <view wx:if="{{coach.type === 'hint'}}">
+        <view class="tag">提示</view>
+        <view class="mt6">推荐：<b>{{coach.rec}}</b></view>
+        <view class="note mt6">{{coach.why}}</view>
+        <view wx:if="{{coach.aiBtn}}" class="row mt10"><view class="btn ghost sm" hover-class="hov" bindtap="onHintAI">问 AI（可以追问）</view></view>
+      </view>
+      <view hidden="{{coach.type !== 'hint'}}"><aithread id="hintAI"></aithread></view>
+      <view wx:if="{{coach.type === 'verdict'}}">
+        <view class="verdict {{coach.res}}">
+          <view class="tag">{{coach.tag}}</view>
+          <view class="mt6">你：<b>{{coach.you}}</b> · 推荐：<b>{{coach.rec}}</b> <text class="note">（{{coach.cat}}）</text></view>
+          <view class="note mt6">{{coach.why}}</view>
+        </view>
+        <view class="row mt10"><view class="btn ghost sm" hover-class="hov" bindtap="onCoachAI">AI 详细讲解</view></view>
+      </view>
+      <view hidden="{{coach.type !== 'verdict'}}"><aithread id="coachAI"></aithread></view>
+    </view>
+
+    <view class="panel">
+      <view class="h3" style="margin-bottom:6px">牌局记录</view>
+      <scroll-view scroll-y="true" class="logbox" scroll-into-view="{{logEnd}}">
+        <view wx:for="{{log}}" wx:key="index" id="lg{{index}}" class="log">{{item}}</view>
+      </scroll-view>
+    </view>
+
+    <view class="panel">
+      <view class="row between"><view class="h3">{{status.title}}</view><view class="pill cur">{{status.phase}}</view></view>
+      <view wx:for="{{status.rows}}" wx:key="index" class="kv"><text>{{item[0]}}</text><text class="v">{{item[1]}}</text></view>
+      <view class="opts mt10">
+        <view class="row between"><text class="note">弃牌后自动发下一手</text><switch checked="{{status.auto}}" color="#d6a64a" data-k="auto" bindchange="onOpt" /></view>
+        <view class="row between"><text class="note">快速</text><switch checked="{{status.fast}}" color="#d6a64a" data-k="fast" bindchange="onOpt" /></view>
+        <view class="row between"><text class="note">显示对手风格</text><switch checked="{{status.style}}" color="#d6a64a" data-k="style" bindchange="onOpt" /></view>
+        <view wx:if="{{status.mode === 'cash'}}" class="row between"><text class="note">自动补到 100 BB</text><switch checked="{{status.topup}}" color="#d6a64a" data-k="topup" bindchange="onOpt" /></view>
+      </view>
+      <view class="row mt10">
+        <view wx:if="{{status.mode !== 'drill'}}" class="btn ghost sm" bindtap="onLeave">存档并离开</view>
+        <view class="btn ghost sm" bindtap="onQuit">{{status.mode === 'mtt' ? '放弃比赛' : status.mode === 'cash' ? '离桌并查看总结' : '结束并查看总结'}}</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- summary -->
+  <block wx:if="{{view === 'end'}}">
+    <view class="panel">
+      <view class="eyebrow">{{end.title}} · 训练总结</view>
+      <view class="h2 mt6">{{end.res}}</view>
+      <view class="stats stats4 mt10"><view wx:for="{{end.stats}}" wx:key="index" class="stat"><view class="l">{{item[0]}}</view><view class="v">{{item[1]}}</view></view></view>
+      <block wx:if="{{end.cash}}">
+        <view class="stats stats4 mt10"><view wx:for="{{end.cash.stats}}" wx:key="index" class="stat"><view class="l">{{item[0]}}</view><view class="v" style="font-size:16px">{{item[1]}}</view></view></view>
+        <block wx:if="{{end.cash.curve}}">
+          <image src="{{end.cash.curve}}" mode="widthFix" style="width:100%;margin-top:10px"></image>
+          <view class="row between note mono" style="font-size:11px"><text>第 1 手</text><text>累计盈亏（BB）</text><text>第 {{end.cash.hands}} 手</text></view>
+        </block>
+        <view class="note mt6">盈亏受运气影响很大，几百手的结果说明不了水平，更应该看决策正确率。6 人桌稳健常客的 VPIP 大约 22% 到 27%，PFR 大约 18% 到 23%。</view>
+      </block>
+      <view class="mt10"><view wx:for="{{end.cats}}" wx:key="k" class="kv"><text>{{item.k}}</text><text class="v">{{item.t}}</text></view></view>
+      <view class="row mt14">
+        <view wx:if="{{end.revBtn}}" class="btn gold sm" hover-class="hov" bindtap="onReview">AI 赛后复盘</view>
+        <view class="btn ghost sm" bindtap="onAgain">再来一场同样的</view>
+        <view class="btn ghost sm" bindtap="onBack">换一个场景</view>
+      </view>
+      <aithread id="aiRevOut"></aithread>
+    </view>
+    <view class="panel">
+      <view class="h3">错误回顾</view>
+      <view wx:if="{{!end.mis.length}}" class="note mt6">这一场没有明显错误，做得好。</view>
+      <view wx:for="{{end.mis}}" wx:key="index" class="mis">
+        <view class="row between"><view><b>{{item.head}}</b> · <text class="mono" style="font-size:13px">{{item.cards}}</text></view><view class="btn ghost sm" data-i="{{index}}" bindtap="onMisAI">AI 讲解</view></view>
+        <view class="mt6">你选择了<b>{{item.you}}</b>，推荐<b>{{item.rec}}</b>。</view>
+        <view class="note mt6">{{item.why}}</view>
+        <aithread id="mis{{index}}"></aithread>
+      </view>
+    </view>
+  </block>
+</view>

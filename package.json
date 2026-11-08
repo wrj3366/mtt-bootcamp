@@ -1,0 +1,12 @@
+{
+  "name": "mtt-bootcamp",
+  "private": true,
+  "description": "德州扑克训练营：网页版 index.html 和微信小程序 miniprogram/",
+  "scripts": {
+    "build:mp": "node tools/build-miniprogram.mjs"
+  },
+  "devDependencies": {
+    "acorn": "^8.14.0",
+    "acorn-walk": "^8.3.4"
+  }
+}

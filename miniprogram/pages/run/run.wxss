@@ -1,0 +1,3 @@
+.felt{border-radius:40px;background:radial-gradient(ellipse at center,#17634b 0%,#0e4434 70%);border:6px solid #3b2615;box-shadow:inset 0 0 0 2px var(--brass-deep),0 16px 30px rgba(0,0,0,.4);padding:18px 14px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.lbl{font:500 11px var(--mono);color:var(--muted);letter-spacing:.1em;text-align:center}
+.msg{text-align:center;color:var(--ivory);min-height:3em;padding:0 8px}

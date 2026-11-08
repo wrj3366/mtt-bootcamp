@@ -1,0 +1,3 @@
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.opts .btn{flex:1 1 40%}
+.clr{color:var(--brass);margin-left:6px}

@@ -1,0 +1,11 @@
+<view class="aithread" wx:if="{{list.length}}">
+  <view wx:for="{{list}}" wx:key="index" class="aimsg {{item.cls}}"><text user-select="true">{{item.t}}</text></view>
+  <view wx:if="{{setup}}" class="row"><view class="btn ghost sm" hover-class="hov" bindtap="onSetup">去 AI 设置</view></view>
+  <view class="aisug" wx:if="{{ask && !busy}}">
+    <view wx:for="{{sugs}}" wx:key="*this" class="sugb" hover-class="hov" data-q="{{item}}" bindtap="onSug">{{item}}</view>
+  </view>
+  <view class="aiask" wx:if="{{ask}}">
+    <input class="input" value="{{input}}" bindinput="onInput" bindconfirm="onSend" confirm-type="send" placeholder="还有不明白的？在这里追问" placeholder-style="color:#5f7a6d" />
+    <view class="btn gold sm {{busy ? 'dis' : ''}}" hover-class="hov" bindtap="onSend">追问</view>
+  </view>
+</view>

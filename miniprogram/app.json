@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/course/course",
+    "pages/drill/drill",
+    "pages/sim/sim",
+    "pages/tools/tools",
+    "pages/lesson/lesson",
+    "pages/map/map",
+    "pages/icm/icm",
+    "pages/run/run",
+    "pages/ai/ai"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#072519",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "德州扑克训练营",
+    "backgroundColor": "#072519",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#9db7a8",
+    "selectedColor": "#d6a64a",
+    "backgroundColor": "#072519",
+    "borderStyle": "black",
+    "list": [
+      {"pagePath": "pages/course/course", "text": "课程"},
+      {"pagePath": "pages/drill/drill", "text": "练习"},
+      {"pagePath": "pages/sim/sim", "text": "模拟赛"},
+      {"pagePath": "pages/tools/tools", "text": "工具"}
+    ]
+  },
+  "usingComponents": {"aithread": "/components/aithread/aithread"},
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

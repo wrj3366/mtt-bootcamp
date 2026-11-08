@@ -1,0 +1,32 @@
+<view class="wrap">
+  <view wx:if="{{banner}}" class="banner"><b>{{banner.title}}</b><text class="note"> · {{banner.txt}}</text></view>
+  <view class="panel">
+    <view class="eyebrow">模拟锦标赛</view>
+    <view class="h2 mt6">从 15 个大盲打进决赛桌</view>
+    <view class="note mt6">100 人参赛，前 15 名进钱圈，目标是活到最后 9 人。每 9 手牌盲注升一级。只有全下和弃牌两个选项。系统会分开记录两件事：你的决策对不对，以及这手牌的结果好不好。至少做 5 次决策，这一场才计入课程任务。</view>
+  </view>
+  <view class="felt">
+    <view class="lbl">{{vLbl}}</view>
+    <rich-text nodes="{{villain}}"></rich-text>
+    <rich-text nodes="{{board}}" style="min-height:54px;display:block"></rich-text>
+    <view class="pot">{{pot}}</view>
+    <rich-text nodes="{{hero}}"></rich-text>
+    <view class="lbl">{{heroLbl}}</view>
+  </view>
+  <view class="msg">{{msg}}<view wx:if="{{big}}" style="color:var(--brass);font-weight:700;margin-top:4px">{{big}}</view><view wx:if="{{endNote}}" class="note">{{endNote}}</view></view>
+  <view class="row center">
+    <view wx:if="{{state === 'start'}}" class="btn gold" hover-class="hov" bindtap="onStart">{{startLbl}}</view>
+    <block wx:if="{{state === 'act'}}"><view class="btn push" hover-class="hov" bindtap="onPush">全下</view><view class="btn fold" hover-class="hov" bindtap="onFold">弃牌</view></block>
+    <view wx:if="{{state === 'next'}}" class="btn gold" hover-class="hov" bindtap="onNext">下一手</view>
+  </view>
+  <view class="panel">
+    <rich-text nodes="{{seats}}"></rich-text>
+    <view wx:if="{{phase}}" class="row between mt10"><text class="note">{{phase}}</text></view>
+    <view wx:if="{{phase}}" class="meter mt6"><view class="bar" style="width:{{prog}}%"></view></view>
+    <view class="mt10"><view wx:for="{{rows}}" wx:key="index" class="kv"><text>{{item[0]}}</text><text class="v">{{item[1]}}</text></view></view>
+  </view>
+  <view wx:if="{{log.length}}" class="panel">
+    <view class="h3" style="margin-bottom:6px">牌局记录</view>
+    <view wx:for="{{log}}" wx:key="index" class="log">{{item}}</view>
+  </view>
+</view>

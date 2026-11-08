@@ -1,0 +1,11 @@
+.pickcol{display:flex;flex-direction:column;gap:14px}
+.resume{margin-top:10px;padding:10px 12px;border:1px solid var(--brass-deep);border-radius:12px;background:rgba(214,166,74,.08)}
+.form{display:flex;flex-direction:column;gap:10px}
+.scn{margin-top:10px;padding:12px;border:1px solid var(--felt-line);border-radius:14px;display:flex;flex-direction:column;gap:3px}
+.simtable{height:440px}
+.actbar{background:rgba(4,22,15,.55);border:1px solid var(--felt-line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.acts .btn{flex:1 1 40%;padding:10px 8px;font-size:14px}
+.logbox{max-height:170px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.mis{border-top:1px dashed var(--felt-line);padding-top:10px;margin-top:10px}

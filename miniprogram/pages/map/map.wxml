@@ -1,0 +1,32 @@
+<view class="wrap">
+  <view wx:if="{{banner}}" class="banner"><b>{{banner.title}}</b><text class="note"> · {{banner.txt}}</text></view>
+  <view class="panel">
+    <view class="eyebrow">一场 MTT 的五个阶段</view>
+    <view class="h2 mt6">筹码深度决定打法</view>
+    <view class="stages mt10">
+      <view wx:for="{{stages}}" wx:key="k" class="stage {{item.on ? 'on' : ''}}" hover-class="hov" data-i="{{index}}" bindtap="onStage">
+        <view class="note mono" style="font-size:10.5px">{{item.lv}}</view><view class="h3">{{item.k}}</view><view class="note mono" style="font-size:10.5px">{{item.bb}}</view>
+      </view>
+    </view>
+    <view class="h3 mt14">{{stage.title}}</view>
+    <view class="mt6" style="font-size:14.5px">{{stage.body}}</view>
+    <view wx:for="{{stage.tips}}" wx:key="*this" class="note mt6">· {{item}}</view>
+    <image src="{{chart}}" mode="widthFix" style="width:100%;margin-top:12px"></image>
+    <view class="note">示例结构：100 人参赛，起始 20,000 筹码，每级约 20 分钟。曲线是剩余玩家的平均筹码折算成多少个大盲。盲注涨得比人数减少快，所以平均筹码深度一路往下掉。</view>
+  </view>
+  <view class="panel">
+    <view class="eyebrow">计算器</view>
+    <view class="h2 mt6">你还剩多少“回合”？</view>
+    <view class="mgrid mt10">
+      <view class="f">你的筹码<input class="input" type="number" value="{{m.stack}}" data-k="stack" bindinput="onM" /></view>
+      <view class="f">小盲<input class="input" type="number" value="{{m.sb}}" data-k="sb" bindinput="onM" /></view>
+      <view class="f">大盲<input class="input" type="number" value="{{m.bb}}" data-k="bb" bindinput="onM" /></view>
+      <view class="f">大盲前注<input class="input" type="number" value="{{m.ante}}" data-k="ante" bindinput="onM" /></view>
+    </view>
+    <view class="note mt6">现在多数比赛用“大盲前注”：大盲位一人替全桌付前注，通常等于一个大盲。</view>
+    <view class="mt10"><view wx:for="{{out.rows}}" wx:key="index" class="kv"><text>{{item[0]}}</text><text class="v">{{item[1]}}</text></view></view>
+    <view class="mt10"><text class="zone" style="background:{{out.color}}">{{out.zone}}</text></view>
+    <view class="mt6">{{out.tip}}</view>
+    <view class="note mt6">M 值分区来自 Dan Harrington 的经典理论。现代教练更常直接用“大盲数”思考，两者结合着看。</view>
+  </view>
+</view>

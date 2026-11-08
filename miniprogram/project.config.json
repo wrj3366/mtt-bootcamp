@@ -1,0 +1,26 @@
+{
+  "description": "德州扑克训练营小程序：课程、题库、范围和牌局引擎由 ../tools/build-miniprogram.mjs 从 ../index.html 生成",
+  "appid": "touristappid",
+  "projectname": "poker-bootcamp",
+  "compileType": "miniprogram",
+  "libVersion": "3.4.0",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "showShadowRootInWxmlPanel": true,
+    "ignoreUploadUnusedFiles": true,
+    "minifyWXML": true
+  },
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  }
+}

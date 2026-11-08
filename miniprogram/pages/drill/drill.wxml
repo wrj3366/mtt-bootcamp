@@ -1,0 +1,42 @@
+<view class="wrap">
+  <view wx:if="{{banner}}" class="banner" hover-class="hov" bindtap="onBanner"><b>{{banner.title}}</b><text class="note"> · {{banner.txt}}</text></view>
+  <scroll-view scroll-x="true" class="chips" scroll-into-view="{{scrollId}}" scroll-with-animation="true">
+    <view wx:for="{{chips}}" wx:key="id" id="c-{{item.id}}" class="chip {{item.on ? 'on' : ''}}" data-id="{{item.id}}" bindtap="onChip">{{item.name}}</view>
+  </scroll-view>
+
+  <view class="panel">
+    <view class="row between"><view class="eyebrow">{{kind}}</view><view wx:if="{{filter}}" class="note">{{filter}} <text class="clr" bindtap="onClearFilter">取消筛选</text></view></view>
+    <view class="h2 mt6">{{q}}</view>
+    <rich-text class="visual" nodes="{{visual}}" style="display:block;margin-top:12px"></rich-text>
+    <view class="opts">
+      <block wx:if="{{!done}}">
+        <view wx:for="{{opts}}" wx:key="v" class="btn {{item.c}}" hover-class="hov" data-i="{{index}}" bindtap="onAnswer">{{item.l}}</view>
+      </block>
+      <view wx:else class="btn gold" hover-class="hov" bindtap="newSpot">下一题 →</view>
+    </view>
+  </view>
+
+  <view class="verdict {{verdict.cls}}">
+    <view class="tag">{{verdict.tag}}</view>
+    <rich-text class="rt" nodes="{{verdict.html}}" style="display:block;margin-top:6px" user-select="true"></rich-text>
+    <view wx:if="{{aiBtn}}" class="row mt10"><view class="btn ghost sm" hover-class="hov" bindtap="onAI">问 AI（可以追问）</view></view>
+    <aithread id="dAI"></aithread>
+  </view>
+
+  <view wx:if="{{grid}}" class="panel">
+    <view class="row between"><view class="h3">{{grid.title}}</view><view class="note mono">{{grid.lbl}}</view></view>
+    <rich-text nodes="{{grid.html}}" style="display:block;margin-top:10px"></rich-text>
+    <view class="legend mt10">
+      <view><text class="sw" style="background:#d2462f"></text>{{grid.inLbl}}</view>
+      <view wx:if="{{grid.two}}"><text class="sw" style="background:#2f7a5a"></text>{{grid.callLbl}}</view>
+      <view wx:if="{{grid.edge}}"><text class="sw" style="background:#8a4a1f"></text>边缘</view>
+      <view><text class="sw" style="background:#173329;box-shadow:inset 0 0 0 2px #d6a64a"></text>你的牌</view>
+    </view>
+  </view>
+
+  <view class="panel stats" style="grid-template-columns:repeat(3,1fr)">
+    <view class="stat"><view class="l">做过</view><view class="v">{{st.n}}</view></view>
+    <view class="stat"><view class="l">正确率</view><view class="v">{{st.acc}}</view></view>
+    <view class="stat"><view class="l">连对</view><view class="v">{{st.streak}}</view></view>
+  </view>
+</view>

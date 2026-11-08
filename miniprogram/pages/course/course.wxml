@@ -1,0 +1,28 @@
+<view class="wrap">
+  <view class="trackbar">
+    <view wx:for="{{tracks}}" wx:key="k" class="trk {{item.on ? 'on' : ''}}" hover-class="hov" data-k="{{item.k}}" bindtap="onTrack">
+      <view class="trk-n">{{item.n}}</view><view class="note">{{item.sub}}</view>
+    </view>
+  </view>
+  <view class="panel ov">
+    <view class="ring"><text class="ring-t">{{pct}}%</text></view>
+    <view style="flex:1;min-width:0">
+      <view class="eyebrow">{{head}}</view>
+      <view class="h2">{{ovTitle}}</view>
+      <view class="note mt6">{{ovSub}}</view>
+      <view class="meter mt10"><view class="bar" style="width:{{pct}}%"></view></view>
+      <view wx:if="{{activeId}}" class="btn gold sm mt10" hover-class="hov" bindtap="onGo">继续当前这课 →</view>
+    </view>
+  </view>
+  <view class="panel">
+    <block wx:for="{{stages}}" wx:key="name" wx:for-item="S">
+      <view class="stagehead">{{S.name}}</view>
+      <view wx:for="{{S.lessons}}" wx:key="id" class="lrow {{item.st}}" hover-class="hov" data-id="{{item.id}}" data-st="{{item.st}}" bindtap="onLesson">
+        <view class="dot {{item.st === 'done' ? 'done' : item.st === 'cur' ? 'cur' : ''}}">{{item.st === 'done' ? '✓' : item.n}}</view>
+        <view class="lt"><view>{{item.t}}</view><view class="note mono" style="font-size:11px">{{item.sub}}</view></view>
+        <view class="pill {{item.st === 'done' ? 'done' : item.st === 'cur' ? 'cur' : ''}}">{{item.pill}}</view>
+      </view>
+    </block>
+  </view>
+  <view class="note" style="padding:0 4px">进度保存在这台手机的微信里，和网页版的进度分开记录。</view>
+</view>
