@@ -222,6 +222,16 @@ textarea{font-family:var(--f-body);font-weight:400;resize:vertical;min-height:70
 .raisebox{display:grid;gap:8px;margin-top:10px}
 .aiout{margin-top:10px;white-space:pre-wrap;border:1px solid var(--brass-deep);border-radius:12px;padding:12px 14px;background:rgba(214,166,74,.06);font-size:14px}
 .aiout.err{border-color:var(--bad);color:var(--bad)}
+.aithread{margin-top:10px;display:grid;gap:8px}
+.aimsg{white-space:pre-wrap;border:1px solid var(--brass-deep);border-radius:12px;padding:10px 12px;background:rgba(214,166,74,.06);font-size:14px;line-height:1.65}
+.aimsg.me{justify-self:end;max-width:88%;border-color:var(--felt-line);background:#0a2219}
+.aimsg.err{border-color:var(--bad);color:var(--bad)}
+.aimsg.wait{color:var(--muted)}
+.aiask{display:flex;gap:6px;align-items:stretch}
+.aiask input{flex:1;min-width:0}
+.aisug{display:flex;gap:6px;flex-wrap:wrap}
+.aisug button{background:transparent;border:1px solid var(--felt-line);color:var(--muted);border-radius:999px;padding:3px 10px;font:400 12.5px var(--f-body);cursor:pointer}
+.aisug button:hover{border-color:var(--brass-deep);color:var(--ink)}
 .ok-text{color:var(--good)}.err-text{color:var(--bad)}
 details.table summary{cursor:pointer}
 .resume{display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:12px;padding:12px 14px;border:1px solid var(--brass-deep);border-radius:12px;background:rgba(214,166,74,.08)}
@@ -340,6 +350,8 @@ footer{margin-top:36px;color:var(--muted);font-size:12.5px;border-top:1px solid 
     </div>
     <div class="table" style="display:grid;gap:14px;align-content:start">
       <div id="dVerdict" class="verdict"></div>
+      <div id="dAIRow" class="row" hidden><button class="btn ghost sm" id="dAIBtn">问 AI（可以追问）</button></div>
+      <div id="dAI" hidden></div>
       <div id="dGridWrap" hidden>
         <div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 id="dGridTitle">推荐范围</h3><span class="note mono" id="dGridLbl"></span></div>
         <div class="hgrid" id="dGrid"></div>
@@ -1604,7 +1616,7 @@ function newSpot(){
   const o=$('dOpts');o.innerHTML='';
   X.opts(D.spot).forEach(op=>{const b=document.createElement('button');b.className='btn '+(op.c||'fold');b.textContent=op.l;b.onclick=()=>answer(op.v);o.appendChild(b)});
   $('dVerdict').className='verdict';$('dVerdict').innerHTML=`<span class="tag">提示</span><p style="margin-top:6px">${X.help}</p>`;
-  $('dGridWrap').hidden=true;dStats();
+  $('dGridWrap').hidden=true;$('dAIRow').hidden=true;$('dAI').hidden=true;$('dAI').innerHTML='';dStats();
 }
 function answer(v){
   if(D.done)return;D.done=true;
@@ -1615,6 +1627,11 @@ function answer(v){
     $('lgEdge').hidden=!!r.grid.fn;$('lgCall').hidden=!r.grid.two;$('lgInT').textContent=r.grid.inLbl||'在范围内';$('lgCallT').textContent=r.grid.callLbl||'跟注'}
   const o=$('dOpts');o.innerHTML='';const n=document.createElement('button');n.className='btn gold';n.textContent='下一题 →';n.onclick=newSpot;o.appendChild(n);n.focus({preventScroll:true});
   recordDrill(D.id,D.spot,correct);dStats();
+  const pick=(DRILLS[D.id].opts(D.spot).find(o=>o.v===v)||{}).l||String(v);
+  $('dAIRow').hidden=false;$('dAIBtn').hidden=false;
+  $('dAIBtn').onclick=()=>{$('dAIBtn').hidden=true;
+    const ctx=`练习：${DRILLS[D.id].name}（${$('dKind').textContent}）\n题目：${$('dQ').textContent}\n题目信息：${$('dVisual').innerText.replace(/\n+/g,'；')}\n学生的选择：${pick}\n系统判断与讲解：${$('dVerdict').innerText.replace(/\n+/g,' ')}\n\n请讲解这道题：为什么这样判断，背后的概念是什么。`;
+    aiThread($('dAI'),track==='cash'?COACH_SYS_CASH:COACH_SYS,ctx)};
 }
 
 /* ================= tabs ================= */
@@ -2478,12 +2495,38 @@ async function aiChat(messages,{max=700,timeout=40000}={}){
 const COACH_SYS='你是一名德州扑克锦标赛（MTT）教练，学生是初学者。根据给出的牌局信息和系统的规则判断，讲清楚学生这一步好在哪里或错在哪里、更好的打法是什么、背后是哪个概念（位置、大盲数、底池赔率、弃牌率、ICM 等）。引用具体数字。用简体中文，语气友好直接，不超过 220 字，不要用 Markdown 标题和表格。';
 const COACH_SYS_CASH='你是一名德州扑克现金局教练（6 人桌、100 BB），学生是初学者。根据给出的牌局信息和系统的规则判断，讲清楚学生这一步好在哪里或错在哪里、更好的打法是什么、背后是哪个概念（位置、开池范围、3bet、大盲防守、底池赔率、隐含赔率、SPR、防守频率、对手类型等）。引用具体数字。用简体中文，语气友好直接，不超过 220 字，不要用 Markdown 标题和表格。';
 const coachSys=()=>G&&G.mode==='cash'?COACH_SYS_CASH:COACH_SYS;
+const FOLLOW_SYS='\n学生之后可能会追问。回答追问时紧扣这手牌和上面的局面，直接回答问题，不超过 200 字。';
+const AI_SUG=['为什么不是别的选择？','如果对手是松凶玩家呢？','换一个位置会怎样？','用更简单的话再讲一遍'];
+function aiNotReady(el){el.hidden=false;el.className='aiout err';el.textContent=AI.blocked?'Claude 页面里无法连接外部 AI 接口，请使用 GitHub 或本地版本。':'请先在页面下方的“AI 设置”里填写接口地址、模型和 API Key。'}
+// one AI conversation in el: the first reply, then the student's follow-up questions
+function aiThread(el,sys,first,{wait='AI 教练思考中…',fail='AI 讲解失败',max=600,timeout=40000}={}){
+  if(!el)return;
+  if(!aiUsable())return aiNotReady(el);
+  const msgs=[{role:'system',content:sys+FOLLOW_SYS},{role:'user',content:first}];
+  el.hidden=false;el.className='aithread';
+  el.innerHTML='<div class="aimsgs" style="display:grid;gap:8px"></div><div class="aisug" hidden></div><div class="aiask" hidden><input type="text" placeholder="还有不明白的？在这里追问，比如：为什么不跟注？" aria-label="追问 AI"><button class="btn gold sm">追问</button></div>';
+  const box=el.querySelector('.aimsgs'),sug=el.querySelector('.aisug'),ask=el.querySelector('.aiask'),inp=ask.querySelector('input'),btn=ask.querySelector('button');
+  let busy=false;
+  const add=(t,cls)=>{const d=document.createElement('div');d.className='aimsg'+(cls?' '+cls:'');d.textContent=t;box.appendChild(d);return d};
+  const run=async(firstTime)=>{
+    busy=true;btn.disabled=true;sug.hidden=true;const w=add(wait,'wait');
+    // keep the opening context plus the last few turns so long chats stay small
+    const send=msgs.length>12?[msgs[0],msgs[1],msgs[2],...msgs.slice(-9)]:msgs;
+    try{const t=await aiChat(send,{max:firstTime?max:500,timeout});w.className='aimsg';w.textContent=t;msgs.push({role:'assistant',content:t})}
+    catch(e){w.className='aimsg err';w.textContent=(firstTime?fail:'追问失败')+'：'+e.message;if(!firstTime)msgs.pop()}
+    busy=false;btn.disabled=false;
+    if(msgs.length>2){ask.hidden=false;sug.hidden=false}
+  };
+  const go=q=>{q=(q||'').trim();if(!q||busy)return;inp.value='';add(q,'me');msgs.push({role:'user',content:q});run(false)};
+  btn.onclick=()=>go(inp.value);
+  inp.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();go(inp.value)}};
+  AI_SUG.forEach(q=>{const b=document.createElement('button');b.textContent=q;b.onclick=()=>go(q);sug.appendChild(b)});
+  run(true);
+}
 async function aiExplain(rec,el){
   if(!el)return;
-  el.hidden=false;el.className='aiout';el.textContent='AI 教练思考中…';
   const msg=`${rec.ctx}\n\n学生的选择：${ACT_CN[rec.type]}\n系统判断：${rec.res==='ok'?'正确':rec.res==='mid'?'可以接受':'错误'}；推荐：${ACT_CN[rec.coach.rec]}\n系统给出的理由：${rec.coach.why}\n\n请讲解这一步。`;
-  try{el.textContent=await aiChat([{role:'system',content:coachSys()},{role:'user',content:msg}],{max:600})}
-  catch(e){el.className='aiout err';el.textContent='AI 讲解失败：'+e.message}
+  aiThread(el,coachSys(),msg);
 }
 async function aiOpponent(p){
   const st=STYLES[p.style]||STYLES.reg,toCall=Math.max(0,H.curBet-p.bet),max=p.bet+p.stack,minTo=Math.min(max,H.curBet+H.minRaise);
@@ -2500,12 +2543,10 @@ async function aiOpponent(p){
   throw new Error('动作无法识别');
 }
 async function aiReview(el){
-  el.hidden=false;el.className='aiout';el.textContent='AI 正在复盘这场比赛…';
   const d=G.decisions,mis=d.filter(x=>x.res==='no');
   const byCat={};d.forEach(x=>{const c=x.coach.cat;byCat[c]=byCat[c]||{n:0,bad:0};byCat[c].n++;if(x.res==='no')byCat[c].bad++});
   const msg=`场景：${G.S.n}（${G.S.desc}）\n结果：${resultText()}\n${G.mode==='cash'?`入池率 VPIP ${Math.round(G.cs.vpip/Math.max(1,G.cs.hands)*100)}%，翻牌前加注率 PFR ${Math.round(G.cs.pfr/Math.max(1,G.cs.hands)*100)}%\n`:''}共 ${d.length} 次决策，错误 ${mis.length} 次。\n分类统计：${Object.entries(byCat).map(([k,v])=>`${k} ${v.n} 次，错 ${v.bad} 次`).join('；')}\n\n错误明细：\n${mis.slice(0,12).map((x,i)=>`${i+1}. 第 ${x.hand} 手${STREET_CN[x.street]}，手牌 ${x.cards.map(cardTxt).join(' ')}${x.board.length?'，公共牌 '+x.board.map(cardTxt).join(' '):''}：选择${ACT_CN[x.type]}，推荐${ACT_CN[x.coach.rec]}。理由：${x.coach.why}`).join('\n')||'（没有明显错误）'}\n\n请做一次赛后复盘：指出最主要的 2 到 3 个问题和它们的共同原因，给出下一步练习建议${G.mode==='cash'?'（可以建议现金局课程里的练习：6 人桌开池、隔离平跟、面对开池、大盲防守、面对 3bet、翻牌牌面、隐含赔率、SPR、MDF、河牌价值与诈唬）':'（可以建议课程里的练习：推弃、开池、反推、翻牌牌面、ICM 跟注、底池赔率）'}。不超过 350 字。`;
-  try{el.textContent=await aiChat([{role:'system',content:coachSys().replace('不超过 220 字','不超过 350 字')},{role:'user',content:msg}],{max:900,timeout:60000})}
-  catch(e){el.className='aiout err';el.textContent='AI 复盘失败：'+e.message}
+  aiThread(el,coachSys().replace('不超过 220 字','不超过 350 字'),msg,{wait:'AI 正在复盘这场比赛…',fail:'AI 复盘失败',max:900,timeout:60000});
 }
 
 /* ---------- UI ---------- */
@@ -2609,14 +2650,15 @@ function renderActions(){
   if(rng){rng.oninput=upd;upd();A.querySelectorAll('[data-to]').forEach(b=>b.onclick=()=>{rng.value=b.dataset.to;upd()})}
   A.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const a=b.dataset.a;heroAct(a==='raise'?{type:'raise',to:+rng.value}:{type:a})});
   $('hintBtn').onclick=()=>{G.coachNow=G.coachNow||coach(p);G.hint=true;const c=G.coachNow;
-    $('coachBox').innerHTML=`<span class="tag" style="font:700 13px var(--f-mono);color:var(--brass)">提示</span><p style="margin-top:6px">推荐：<b>${ACT_CN[c.rec]}</b></p><p class="note" style="margin-top:6px"></p>`;$('coachBox').querySelector('p.note').textContent=c.why};
+    $('coachBox').innerHTML=`<span class="tag" style="font:700 13px var(--f-mono);color:var(--brass)">提示</span><p style="margin-top:6px">推荐：<b>${ACT_CN[c.rec]}</b></p><p class="note" style="margin-top:6px"></p><div class="row" style="margin-top:10px"><button class="btn ghost sm" id="hintAIBtn">问 AI（可以追问）</button></div><div id="hintAI" hidden></div>`;$('coachBox').querySelector('p.note').textContent=c.why;
+    $('hintAIBtn').onclick=()=>{$('hintAIBtn').hidden=true;aiThread($('hintAI'),coachSys(),`${spotText(p)}\n\n学生还没有行动，先看了提示。\n系统推荐：${ACT_CN[c.rec]}\n系统给出的理由：${c.why}\n\n请解释为什么推荐这样打，以及其他选择的问题在哪里。`)}};
 }
 function showCoach(rec){
   const c=rec.coach,box=$('coachBox');
   box.innerHTML=`<div class="verdict ${rec.res}"><span class="tag">${rec.res==='ok'?'正确':rec.res==='mid'?'可以接受':'这一步有问题'}</span><p style="margin-top:6px">你：<b>${ACT_CN[rec.type]}</b> · 推荐：<b>${ACT_CN[c.rec]}</b> <span class="note">（${c.cat}）</span></p><p class="note why" style="margin-top:6px"></p></div>
     <div class="row" style="margin-top:10px"><button class="btn ghost sm" id="aiBtn">AI 详细讲解</button></div><div id="coachAI" hidden></div>`;
   box.querySelector('.why').textContent=c.why;
-  $('aiBtn').onclick=()=>aiUsable()?aiExplain(rec,$('coachAI')):($('coachAI').hidden=false,$('coachAI').className='aiout err',$('coachAI').textContent=AI.blocked?'Claude 页面里无法连接外部 AI 接口，请使用 GitHub 或本地版本。':'请先在页面下方的“AI 设置”里填写接口地址、模型和 API Key。');
+  $('aiBtn').onclick=()=>aiExplain(rec,$('coachAI'));
 }
 function resultText(){
   const r=G.result||{type:'stop'};
@@ -2643,9 +2685,9 @@ function showSimEnd(){
   mis.forEach((x,i)=>{const el=document.createElement('div');el.className='task';
     el.innerHTML=`<div class="top"><span><b>第 ${x.hand} 手 · ${STREET_CN[x.street]}</b> · <span class="mono">${x.cards.map(cardTxt).join(' ')}${x.board.length?' | '+x.board.map(cardTxt).join(' '):''}</span></span><button class="btn ghost sm">AI 讲解</button></div><p>你选择了<b>${ACT_CN[x.type]}</b>，推荐<b>${ACT_CN[x.coach.rec]}</b>。</p><p class="note"></p><div hidden></div>`;
     el.querySelector('p.note').textContent=x.coach.why;const out=el.querySelector('div[hidden]');
-    el.querySelector('button').onclick=()=>aiUsable()?aiExplain(x,out):(out.hidden=false,out.className='aiout err',out.textContent='请先在页面下方的“AI 设置”里配置 AI 接口。');
+    el.querySelector('button').onclick=()=>aiExplain(x,out);
     ml.appendChild(el)});
-  $('aiRev').onclick=()=>aiUsable()?aiReview($('aiRevOut')):($('aiRevOut').hidden=false,$('aiRevOut').className='aiout err',$('aiRevOut').textContent='请先在页面下方的“AI 设置”里配置 AI 接口。');
+  $('aiRev').onclick=()=>aiReview($('aiRevOut'));
   const key=G.key,cfg=G.cfg;$('simAgain').onclick=()=>startSim(key,cfg);
   $('simBack').onclick=()=>{$('simEnd').hidden=true;$('simPick').hidden=false;renderScnPick()};
   if(AI.cfg.review&&aiUsable()&&d.length>=3)aiReview($('aiRevOut'));
