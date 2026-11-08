@@ -1,0 +1,16 @@
+{
+  "name": "德州扑克训练营",
+  "short_name": "扑克训练营",
+  "description": "MTT 锦标赛和 6 人桌现金局的互动课程、练习和模拟牌桌",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#072519",
+  "theme_color": "#072519",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
